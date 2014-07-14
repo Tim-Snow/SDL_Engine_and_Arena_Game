@@ -1,7 +1,6 @@
 #ifndef CORE_H_
 #define CORE_H_
 
-#include "../SDL2.0\include\SDL.h"
 #include "ResourceLoader.h"
 #include "InputManager.h"
 #include "Settings.h"
@@ -9,21 +8,25 @@
 class Core{
 public:
 	bool initialize();
+	bool isRunning();
 	void setTitle(string s);
-	void mainLoop();
+
+	void updateInput();
+	void updateDisplay();
+	bool checkInput(SDL_Keycode);
+
+	void exit();
 private:
+	SDL_Window * window;
+	SDL_Renderer * renderer;
+
 	int width, height;
 	string name;
 	bool running;
 
 	ResourceLoader resources;
-	InputManager input;
+	InputManager theInput;
 	Settings gameSettings;
-
-	void getInput();
-	void draw();
-	void update();
 };
-
 
 #endif /* defined  (_CORE_H_) */

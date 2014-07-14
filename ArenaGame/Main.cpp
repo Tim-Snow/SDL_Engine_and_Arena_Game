@@ -4,9 +4,12 @@ int main(int argc, char **argv){
 	Core core;
 	core.setTitle("Arena Game!");
 
-	if (core.initialize() == true){
+	if (core.initialize()){
 		//Init was successful, start game
-		core.mainLoop();
+		while (core.isRunning()){
+			core.updateInput();
+			core.updateDisplay();
+		}
 	}
 	return 0;
 }

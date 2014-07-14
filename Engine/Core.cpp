@@ -24,12 +24,12 @@ bool Core::initialize() {
 		return false;
 	}
 
-	SDL_Window *window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
 	if (window == NULL) {
 		return false;
 	}
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == NULL) {
 		return false;
 	}
@@ -41,19 +41,25 @@ bool Core::initialize() {
 	return true;
 }
 
-void Core::mainLoop(){
-	while (running){
-
-	}
-}
-/*
-void getInput(){
+void Core::updateInput(){
+	theInput.pollEvent();
+	running = theInput.checkQuit();
 }
 
-void update(){
+bool Core::checkInput(SDL_Keycode k){
+	return theInput.isPressed(k);
+}
+
+void Core::updateDisplay(){
 
 }
 
-void draw(){
+bool Core::isRunning(){
+	return running;
+}
 
-}*/
+void Core::exit(){
+	running = false;
+	SDL_Quit();
+}
+
