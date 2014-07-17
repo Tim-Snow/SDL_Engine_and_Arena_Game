@@ -2,14 +2,20 @@
 
 int main(int argc, char **argv){
 	Core core;
-	core.setTitle("Arena Game!");
+	std::shared_ptr<GraphicsEngine> gfx = core.gfxEng;
+	std::shared_ptr<InputManager> input  = core.theInput;
+	
+	gfx->setTitle("Arena Game!");
 
-	if (core.initialize()){
-		//Init was successful, start game
-		while (core.isRunning()){
-			core.updateInput();
-			core.updateDisplay();
+	while (core.isRunning()){
+			input->pollEvent();
+			gfx->clearDisplay();
+
+			gfx->updateDisplay();
+					
+			if (input->isPressed(SDLK_ESCAPE)){
+				core.exit();
+			}
 		}
-	}
 	return 0;
 }

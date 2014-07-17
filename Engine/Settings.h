@@ -1,7 +1,8 @@
 #ifndef SETTINGS_H_
 #define SETTINGS_H_
-#include <map>
 #include "ResourceLoader.h"
+#include <map>
+
 
 class Settings{
 public:
