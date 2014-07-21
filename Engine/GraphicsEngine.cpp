@@ -5,7 +5,7 @@ GraphicsEngine::GraphicsEngine(){
 }
 
 void GraphicsEngine::setTitle(std::string n){
-	name = n;
+	SDL_SetWindowTitle(window, n.c_str());
 }
 
 bool GraphicsEngine::makeWindow(int width, int height){
@@ -21,7 +21,7 @@ bool GraphicsEngine::makeWindow(int width, int height){
 }
 
 void GraphicsEngine::drawSquare(int x, int y, int w, int r, int g, int b){
-	SDL_Rect  rect = { x, y, w, w };
+	SDL_Rect rect = { x, y, w, w };
 	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }

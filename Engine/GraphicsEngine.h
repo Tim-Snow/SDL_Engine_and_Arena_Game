@@ -1,14 +1,16 @@
 #ifndef GRAPHICSENGINE_H_
 #define GRAPHICSENGINE_H_
 
-#include "../SDL2.0\include\SDL.h"
+#include "AbstractGameObj.h"
 #include <string>
+
 
 class GraphicsEngine{
 public:
 	GraphicsEngine();
 	~GraphicsEngine();
 
+	void draw(AbstractGameObj *g);
 	void clearDisplay();
 	void updateDisplay();
 	bool makeWindow(int w, int h);
