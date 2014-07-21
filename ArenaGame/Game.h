@@ -6,6 +6,9 @@
 
 class Game{
 public:
+	Game();
+	~Game();
+
 	std::vector<GameObject> gameObjects;
 private:
 

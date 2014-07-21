@@ -3,11 +3,14 @@
 
 #include "../Engine/AbstractGameObj.h"
 
-class GameObject : AbstractGameObj{
+class GameObject : public AbstractGameObj{
 public:
+	GameObject();
+	GameObject(double x, double y);
+	GameObject(double x, double y, int w);
+	~GameObject();
 private:
 protected:
-	void draw();
 };
 
 #endif /* defined (_GAMEOBJECT_H_) */

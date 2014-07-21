@@ -20,6 +20,10 @@ bool GraphicsEngine::makeWindow(int width, int height){
 	return true;
 }
 
+void GraphicsEngine::draw(AbstractGameObj *g){
+	drawSquare(g->x, g->y, g->w, 100, 0, 0);
+}
+
 void GraphicsEngine::drawSquare(int x, int y, int w, int r, int g, int b){
 	SDL_Rect rect = { x, y, w, w };
 	SDL_SetRenderDrawColor(renderer, r, g, b, 255);

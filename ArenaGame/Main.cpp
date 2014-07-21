@@ -9,14 +9,14 @@ int main(int argc, char **argv){
 
 	gfx->setTitle("Arena Game!");
 
-
-
 	while (core.isRunning()){
 			input->pollEvent();
 			gfx->clearDisplay();
 
 			for (auto i : game.gameObjects){
-				gfx->draw(i);
+				if (i.visible){
+					gfx->draw(&i);
+				}
 			}
 
 			gfx->updateDisplay();	

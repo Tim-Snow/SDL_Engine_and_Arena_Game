@@ -2,10 +2,10 @@
 #include <iostream>
 AbstractGameObj::AbstractGameObj(){
 	gravity = false;
-	visible = true;
-	x = y = 50;
-	w = h = 32;
-	surf = SDL_LoadBMP("test.bmp");
+	visible = false;
+	x = y = 0;
+	w = h = 0;
+	surf = nullptr;
 }
 
 

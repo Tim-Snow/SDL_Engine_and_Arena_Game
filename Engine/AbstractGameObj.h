@@ -15,7 +15,7 @@ public:
 private:
 
 protected:
-	virtual void draw() = 0;
+
 };
 
 #endif /* defined (_ABSTRACTGAMEOBJ_H_) */
