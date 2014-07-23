@@ -1,11 +1,10 @@
 #include "Core.h"
 
-Core::Core(){
+Core::Core(): running(true){
 	gfxEng = std::shared_ptr<GraphicsEngine>(new GraphicsEngine());
 	theInput = std::shared_ptr<InputManager>(new InputManager());
 
 	gameSettings.updateSettings();
-	running = true;
 
 	//read screen sizes from settings map set by ini file
 	string w = gameSettings.settings.at("screenWidth");

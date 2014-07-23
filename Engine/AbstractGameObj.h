@@ -5,17 +5,18 @@
 
 class AbstractGameObj{
 public:
-	AbstractGameObj();
-	~AbstractGameObj();
-
-	SDL_Surface * surf;
+	SDL_Texture * texture;
+	SDL_Rect rect;
 	double x, y;
 	int w, h;
 	bool visible, gravity;
+
+	virtual void addTextureToObject(SDL_Texture * t) = 0;
 private:
-
 protected:
-
+	AbstractGameObj();
+	AbstractGameObj(double x, double y, int w, int h, bool grav, bool vis);
+	~AbstractGameObj();
 };
 
 #endif /* defined (_ABSTRACTGAMEOBJ_H_) */

@@ -1,32 +1,21 @@
 #include "GameObject.h"
 
-GameObject::GameObject(){
-	gravity = false;
-	visible = false;
-	x = y = 0;
-	w = h = 10;
-	surf = nullptr;
+GameObject::GameObject() : AbstractGameObj(){}
+
+GameObject::GameObject(double x, double y, int w, int h, bool grav, bool vis) : AbstractGameObj(x, y, w, h, grav, vis){
+	rect.h = h;
+	rect.w = w;
+	rect.x = x;
+	rect.y = y;
 }
 
-
-GameObject::GameObject(double x2, double y2){
-	gravity = false;
-	visible = false;
-	x = x2;
-	y = y2;
-	w = h = 10;
-	surf = nullptr;
+void GameObject::addTextureToObject(SDL_Texture * t){
+	texture = t;
 }
 
-GameObject::GameObject(double x2, double y2, int w2){
-	gravity = false;
-	visible = true;
-	x = x2;
-	y = y2;
-	w = h = w2;
-	surf = nullptr;
+void GameObject::move(){
+	x += 0.1;
 }
 
 GameObject::~GameObject(){
-	SDL_FreeSurface(surf);
 }

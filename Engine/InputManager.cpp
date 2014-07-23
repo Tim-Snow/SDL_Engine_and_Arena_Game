@@ -1,8 +1,6 @@
 #include "InputManager.h"
 
-InputManager::InputManager(){
-	run = true;
-}
+InputManager::InputManager() : run(true){}
 
 void InputManager::pollEvent(){
 	while (SDL_PollEvent(&event)){
@@ -29,4 +27,8 @@ bool InputManager::isPressed(SDL_Keycode k){
 
 bool InputManager::checkQuit(){
 	return run;
+}
+
+InputManager::~InputManager(){
+
 }

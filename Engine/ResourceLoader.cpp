@@ -18,3 +18,13 @@ string ResourceLoader::readTextFile(const char* path) {
 	fileStream.close();
 	return content;
 }
+
+SDL_Surface * ResourceLoader::loadBMP(const char* path){
+	SDL_Surface * surf;
+	surf = SDL_LoadBMP(path);
+	if (surf == nullptr){
+		cout << "error reading in bmp" << endl;
+	}
+
+	return surf;
+}

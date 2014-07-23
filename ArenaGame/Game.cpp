@@ -1,12 +1,21 @@
 #include "Game.h"
 
 Game::Game(){
-	GameObject a;
-	GameObject * b = new GameObject(50, 50);
-	GameObject * c = new GameObject(100, 100, 100);
+	gfx = core.gfxEng;
+	input = core.theInput;
+
+	resources[0] = getTexture("test.bmp");
+	GameObject a{ 50, 50, 100, 100, true, true };
+	a.addTextureToObject(resources[0]);
+
 	gameObjects.push_back(a);
-	gameObjects.push_back(*b);
-	gameObjects.push_back(*c);
+}
+
+SDL_Texture * Game::getTexture(const char* p){
+	SDL_Surface * surf = res->loadBMP(p);
+	SDL_Texture * texture = gfx->makeTextureFromSurf(surf);
+	SDL_FreeSurface(surf);
+	return texture;
 }
 
 Game::~Game(){

@@ -1,29 +1,20 @@
-#include "../Engine\Core.h"
 #include "Game.h"
 
 int main(int argc, char **argv){
-	Core core;
 	Game game;
-	std::shared_ptr<GraphicsEngine> gfx = core.gfxEng;
-	std::shared_ptr<InputManager> input  = core.theInput;
+	game.gfx->setTitle("Arena Game!");
 
-	gfx->setTitle("Arena Game!");
+	while (game.core.isRunning()){
+		game.input->pollEvent();
+		game.gfx->clearDisplay();
 
-	while (core.isRunning()){
-			input->pollEvent();
-			gfx->clearDisplay();
-
-			for (auto i : game.gameObjects){
-				if (i.visible){
-					gfx->draw(&i);
-				}
-			}
-
-			gfx->updateDisplay();	
-					
-			if (input->isPressed(SDLK_ESCAPE)){
-				core.exit();
-			}
+		for (auto i : game.gameObjects){
+			if (i.visible){	game.gfx->draw(&i); }
 		}
+
+		game.gfx->updateDisplay();
+
+		if (game.input->isPressed(SDLK_ESCAPE)){ game.core.exit(); }
+	}
 	return 0;
 }

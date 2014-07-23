@@ -7,7 +7,8 @@
 class InputManager{
 public:
 	InputManager();
-	
+	~InputManager();
+
 	void pollEvent();
 	bool isPressed(SDL_Keycode);
 	bool checkQuit();
