@@ -2,7 +2,7 @@
 #define GAME_H_
 
 #include "GameObject.h"
-#include "../Engine\Core.h"
+#include "../Engine/Core.h"
 #include "../Engine/ResourceLoader.h"
 #include <vector>
 #include <array>
@@ -22,6 +22,7 @@ public:
 
 	SDL_Texture * getTexture(const char* p);
 private:
+	SDL_Texture * texture;
 protected:
 
 };

@@ -7,10 +7,15 @@ class GameObject : public AbstractGameObj{
 public:
 	GameObject();
 	GameObject(double x, double y, int w, int h, bool grav, bool vis);
-		
-	void move();
-	void addTextureToObject(SDL_Texture * t);
 
+	void move();
+	bool getVisible();
+	bool getGravity();
+	SDL_Rect getRect();
+
+	SDL_Texture * getTexture();
+	void addTextureToObject(SDL_Texture * t);
+	
 	~GameObject();
 private:
 protected:

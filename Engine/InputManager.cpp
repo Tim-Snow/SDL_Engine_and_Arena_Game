@@ -20,15 +20,7 @@ void InputManager::pollEvent(){
 	}
 }
 
-bool InputManager::isPressed(SDL_Keycode k){
-	return keys[k];
-}
+bool InputManager::isPressed(SDL_Keycode k){  return keys[k];  }
+bool InputManager::checkQuit(){  return run;  }
 
-
-bool InputManager::checkQuit(){
-	return run;
-}
-
-InputManager::~InputManager(){
-
-}
+InputManager::~InputManager(){}

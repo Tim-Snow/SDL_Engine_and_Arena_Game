@@ -2,17 +2,18 @@
 #define GRAPHICSENGINE_H_
 
 #include "AbstractGameObj.h"
+#include "../SDL2_TTF\include\SDL_ttf.h"
 #include <string>
-
 
 class GraphicsEngine{
 public:
 	GraphicsEngine();
 	~GraphicsEngine();
 
-	SDL_Texture* makeTextureFromSurf(SDL_Surface * s); 
-	bool makeWindow(int w, int h);
+	SDL_Texture * makeTextureFromSurf(SDL_Surface * s); 
+	SDL_Texture * renderText(const std::string &text, const std::string &font, SDL_Color colour, int size);
 
+	bool makeWindow(int w, int h);
 	void draw(AbstractGameObj *g);
 	void clearDisplay();
 	void updateDisplay();
@@ -23,9 +24,8 @@ private:
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	SDL_Texture * texture;
-	std::string name;
 
-	
+	std::string name;
 };
 
 #endif /* defined (_GRAPHICSENGINE_H_) */

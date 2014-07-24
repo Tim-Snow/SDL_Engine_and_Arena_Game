@@ -1,21 +1,24 @@
 #include "GameObject.h"
 
-GameObject::GameObject() : AbstractGameObj(){}
-
-GameObject::GameObject(double x, double y, int w, int h, bool grav, bool vis) : AbstractGameObj(x, y, w, h, grav, vis){
-	rect.h = h;
-	rect.w = w;
-	rect.x = x;
-	rect.y = y;
+GameObject::GameObject() : AbstractGameObj(){
+	rect = { 0.0, 0.0, 0.0, 0.0 };
 }
 
-void GameObject::addTextureToObject(SDL_Texture * t){
+GameObject::GameObject(double x, double y, int w, int h, bool grav, bool vis) : AbstractGameObj(x, y, w, h, grav, vis){
+	rect = { x, y, w, h };
+}
+
+void GameObject::addTextureToObject(SDL_Texture * t){	
 	texture = t;
 }
 
 void GameObject::move(){
-	x += 0.1;
+	rect.x += 0.1;
 }
 
-GameObject::~GameObject(){
-}
+SDL_Rect GameObject::getRect()	{	return rect.getRect2(); }
+bool GameObject::getVisible()	{	return visible; }
+bool GameObject::getGravity()	{	return gravity; }
+SDL_Texture * GameObject::getTexture(){	 return texture; }
+
+GameObject::~GameObject(){}

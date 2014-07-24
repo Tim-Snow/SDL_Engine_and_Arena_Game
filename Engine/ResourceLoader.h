@@ -14,6 +14,6 @@ public:
 	string readTextFile(const char* p);
 	SDL_Surface * loadBMP(const char* p);
 private:
-
+	SDL_Surface * surf;
 };
 #endif /* defined  (_RESOURCELOADER_H_) */

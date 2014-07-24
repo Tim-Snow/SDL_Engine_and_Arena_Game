@@ -9,11 +9,13 @@ int main(int argc, char **argv){
 		game.gfx->clearDisplay();
 
 		for (auto i : game.gameObjects){
-			if (i.visible){	game.gfx->draw(&i); }
+			if (i.getVisible()){	
+				game.gfx->draw(&i); 
+			}
 		}
 
 		game.gfx->updateDisplay();
-
+		
 		if (game.input->isPressed(SDLK_ESCAPE)){ game.core.exit(); }
 	}
 	return 0;

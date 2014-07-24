@@ -3,19 +3,31 @@
 
 #include "../SDL2.0\include\SDL.h"
 
+struct Rect2f{
+	float x, y, w, h;
+
+	SDL_Rect getRect2(){
+		SDL_Rect rect = { x, y, w, h };
+		return rect;
+	}
+};
+
 class AbstractGameObj{
 public:
-	SDL_Texture * texture;
-	SDL_Rect rect;
-	double x, y;
-	int w, h;
-	bool visible, gravity;
-
+	virtual bool getVisible() = 0;
+	virtual bool getGravity() = 0;
+	virtual SDL_Texture * getTexture() = 0;
+	virtual SDL_Rect getRect() = 0;
 	virtual void addTextureToObject(SDL_Texture * t) = 0;
 private:
 protected:
 	AbstractGameObj();
 	AbstractGameObj(double x, double y, int w, int h, bool grav, bool vis);
+
+	SDL_Texture * texture;
+	Rect2f rect;
+	bool visible, gravity;
+
 	~AbstractGameObj();
 };
 
