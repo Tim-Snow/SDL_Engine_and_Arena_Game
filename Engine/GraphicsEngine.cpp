@@ -21,6 +21,7 @@ bool GraphicsEngine::makeWindow(int width, int height){
 }
 
 void GraphicsEngine::draw(AbstractGameObj * g){
+	SDL_RenderFillRect(renderer, &g->getRect());
 	SDL_RenderCopy(renderer, g->getTexture(), NULL, &g->getRect());
 }
 
@@ -38,12 +39,10 @@ void GraphicsEngine::updateDisplay(){
 	SDL_RenderPresent(renderer);
 }
 
-SDL_Texture * GraphicsEngine::renderText(const std::string &text, const std::string &font, SDL_Color colour, int size){
-	TTF_Font *f = TTF_OpenFont(font.c_str(), size);
+SDL_Texture * GraphicsEngine::createTextTexture(const std::string &text, TTF_Font * f,  SDL_Color colour){
 	SDL_Surface *surf = TTF_RenderText_Blended(f, text.c_str(), colour);
 	texture = makeTextureFromSurf(surf);
 	SDL_FreeSurface(surf);
-	TTF_CloseFont(f);
 	return texture;
 }
 

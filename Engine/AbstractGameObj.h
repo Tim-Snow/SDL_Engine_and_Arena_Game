@@ -2,6 +2,8 @@
 #define ABSTRACTGAMEOBJ_H_
 
 #include "../SDL2.0\include\SDL.h"
+#include "../SDL2_TTF\include\SDL_ttf.h"
+
 
 struct Rect2f{
 	float x, y, w, h;

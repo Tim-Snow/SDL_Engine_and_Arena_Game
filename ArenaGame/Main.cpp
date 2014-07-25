@@ -15,7 +15,7 @@ int main(int argc, char **argv){
 		}
 
 		game.gfx->updateDisplay();
-		
+		if (game.input->isPressed(SDLK_SPACE)){ game.gameObjects[0].move(); }
 		if (game.input->isPressed(SDLK_ESCAPE)){ game.core.exit(); }
 	}
 	return 0;
