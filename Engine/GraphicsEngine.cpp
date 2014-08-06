@@ -1,6 +1,6 @@
 #include "GraphicsEngine.h"
 
-GraphicsEngine::GraphicsEngine() : name("SDL2.0 Engine created by Tim Snow"){}
+GraphicsEngine::GraphicsEngine() : name("SDL2.0 Engine created by Tim Snow"), fullscreen(false){}
 
 void GraphicsEngine::setTitle(std::string n){
 	SDL_SetWindowTitle(window, n.c_str());
@@ -20,9 +20,26 @@ bool GraphicsEngine::makeWindow(int width, int height){
 	return true;
 }
 
-void GraphicsEngine::draw(AbstractGameObj * g){
-	SDL_RenderFillRect(renderer, &g->getRect());
-	SDL_RenderCopy(renderer, g->getTexture(), NULL, &g->getRect());
+void GraphicsEngine::toggleFullscreen(){
+	if (fullscreen){
+		fullscreen = false;
+		SDL_SetWindowFullscreen(window, SDL_FALSE);
+		SDL_SetWindowSize(window, 640, 480);
+		SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+	}	else {
+		fullscreen = true;
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	
+}
+
+void GraphicsEngine::draw(SDL_Texture * t, SDL_Rect r){
+	SDL_RenderCopy(renderer, t, NULL, &r);
+}
+
+void GraphicsEngine::drawFullBG(SDL_Texture * t){
+	SDL_Rect r = { 0, 0, getWindowWidth(), getWindowHeight() };
+	SDL_RenderCopy(renderer, t, NULL, &r);
 }
 
 SDL_Texture* GraphicsEngine::makeTextureFromSurf(SDL_Surface * s){
@@ -39,13 +56,6 @@ void GraphicsEngine::updateDisplay(){
 	SDL_RenderPresent(renderer);
 }
 
-SDL_Texture * GraphicsEngine::createTextTexture(const std::string &text, TTF_Font * f,  SDL_Color colour){
-	SDL_Surface *surf = TTF_RenderText_Blended(f, text.c_str(), colour);
-	texture = makeTextureFromSurf(surf);
-	SDL_FreeSurface(surf);
-	return texture;
-}
-
 void GraphicsEngine::drawSquare(int x, int y, int w, int r, int g, int b){
 	SDL_Rect rect = { x, y, w, w };
 	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
@@ -58,8 +68,23 @@ void GraphicsEngine::drawRect(int x, int y, int w, int h, int r, int g, int b){
 	SDL_RenderFillRect(renderer, &rect);
 }
 
+int GraphicsEngine::getWindowHeight(){
+	int h;
+	SDL_GetWindowSize(window, NULL, &h);
+	return h;
+}
+
+int GraphicsEngine::getWindowWidth(){
+	int w;
+	SDL_GetWindowSize(window, &w, NULL);
+	return w;
+}
+
+void GraphicsEngine::setWindowSize(int w, int h){
+	SDL_SetWindowSize(window, w, h);
+}
+
 GraphicsEngine::~GraphicsEngine(){
-	SDL_DestroyTexture(texture);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 }

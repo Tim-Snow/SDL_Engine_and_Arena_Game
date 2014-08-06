@@ -7,13 +7,11 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
 class ResourceLoader{
 public:
-	string readTextFile(const char* p);
-	SDL_Surface * loadBMP(const char* p);
+	std::string readTextFile(const char*);
+	SDL_Surface * loadBMP(const char*);
+
 private:
-	SDL_Surface * surf;
 };
 #endif /* defined  (_RESOURCELOADER_H_) */

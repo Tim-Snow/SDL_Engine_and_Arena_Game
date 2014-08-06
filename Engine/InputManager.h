@@ -11,10 +11,14 @@ public:
 
 	void pollEvent();
 	bool isPressed(SDL_Keycode);
+	bool isHeld(SDL_Keycode);
+	bool isAnyKeyPressed();
 	bool checkQuit();
 private:
 	SDL_Event event;
-	std::map<int, bool> keys;
+	std::map<int, bool> keysP;
+	std::map<int, bool> keysH;
 	bool run;
+	bool anyKey;
 };
 #endif /* defined  (_INPUTMANAGER_H_) */

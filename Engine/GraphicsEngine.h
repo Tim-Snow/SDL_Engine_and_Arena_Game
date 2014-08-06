@@ -10,10 +10,16 @@ public:
 	~GraphicsEngine();
 
 	SDL_Texture * makeTextureFromSurf(SDL_Surface * s); 
-	SDL_Texture * createTextTexture(const std::string &text, TTF_Font * f, SDL_Color colour);
+
+	int getWindowWidth();
+	int getWindowHeight();
 
 	bool makeWindow(int w, int h);
-	void draw(AbstractGameObj *g);
+	void setWindowSize(int w, int h);
+	void toggleFullscreen();
+	void drawFullBG(SDL_Texture*);
+	void draw(SDL_Texture*, SDL_Rect);
+
 	void clearDisplay();
 	void updateDisplay();
 	void setTitle(std::string n);
@@ -25,6 +31,7 @@ private:
 	SDL_Texture * texture;
 
 	std::string name;
+	bool fullscreen;
 };
 
 #endif /* defined (_GRAPHICSENGINE_H_) */

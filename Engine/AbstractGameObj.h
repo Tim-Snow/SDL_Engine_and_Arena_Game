@@ -4,7 +4,6 @@
 #include "../SDL2.0\include\SDL.h"
 #include "../SDL2_TTF\include\SDL_ttf.h"
 
-
 struct Rect2f{
 	float x, y, w, h;
 
@@ -21,6 +20,8 @@ public:
 	virtual SDL_Texture * getTexture() = 0;
 	virtual SDL_Rect getRect() = 0;
 	virtual void addTextureToObject(SDL_Texture * t) = 0;
+	virtual void update() = 0;
+	virtual void draw() = 0;
 private:
 protected:
 	AbstractGameObj();

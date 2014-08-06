@@ -7,9 +7,9 @@ Core::Core(): running(true){
 	gameSettings.updateSettings();
 
 	//read screen sizes from settings map set by ini file
-	string w = gameSettings.settings.at("screenWidth");
+	std::string w = gameSettings.settings.at("screenWidth");
 	width = atoi(w.c_str());
-	string h = gameSettings.settings.at("screenHeight");
+	std::string h = gameSettings.settings.at("screenHeight");
 	height = atoi(h.c_str());
 
 	//minimum resolution of 640x480

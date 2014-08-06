@@ -16,6 +16,14 @@ void GameObject::move(){
 	rect.x += 0.1;
 }
 
+void GameObject::update(){
+
+}
+
+void GameObject::draw(){
+	//maybe return false if visible is not true
+}
+
 SDL_Rect GameObject::getRect()	{	return rect.getRect2(); }
 bool GameObject::getVisible()	{	return visible; }
 bool GameObject::getGravity()	{	return gravity; }

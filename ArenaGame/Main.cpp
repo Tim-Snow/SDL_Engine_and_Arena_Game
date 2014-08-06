@@ -1,22 +1,26 @@
 #include "Game.h"
+#include <Windows.h>
+
+const int FRAME_LIMIT = 60;
+const double MS_PER_FRAME = 1.0 / FRAME_LIMIT;
 
 int main(int argc, char **argv){
 	Game game;
 	game.gfx->setTitle("Arena Game!");
 
+	double lastTime = GetTickCount();
 	while (game.core.isRunning()){
+		double currentTime = GetTickCount();
+		double elapsedTime = currentTime - lastTime;
+
 		game.input->pollEvent();
-		game.gfx->clearDisplay();
 
-		for (auto i : game.gameObjects){
-			if (i.getVisible()){	
-				game.gfx->draw(&i); 
-			}
+		if (elapsedTime >= MS_PER_FRAME){
+			game.update(elapsedTime);
 		}
+		game.draw();
 
-		game.gfx->updateDisplay();
-		if (game.input->isPressed(SDLK_SPACE)){ game.gameObjects[0].move(); }
-		if (game.input->isPressed(SDLK_ESCAPE)){ game.core.exit(); }
+		lastTime = currentTime;
 	}
 	return 0;
 }

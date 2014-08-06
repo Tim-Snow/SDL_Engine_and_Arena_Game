@@ -13,6 +13,9 @@ public:
 	bool getGravity();
 	SDL_Rect getRect();
 
+	void update();
+	void draw();
+
 	SDL_Texture * getTexture();
 	void addTextureToObject(SDL_Texture * t);
 	

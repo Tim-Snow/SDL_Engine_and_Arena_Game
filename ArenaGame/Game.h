@@ -4,11 +4,12 @@
 #include "GameObject.h"
 #include "../Engine/Core.h"
 #include "../Engine/ResourceLoader.h"
-#include "../Engine/MenuSystem.h"
 #include <vector>
 #include <array>
 
-const int GAME_FONT = 0;
+enum GAME_STATE { PLAY, PAUSE, TITLE_SCREEN, MAIN_MENU, CHAR_SELECT, OPTIONS_MENU };
+
+const int MENU_BG = 0;
 
 class Game{
 public:
@@ -16,19 +17,29 @@ public:
 	~Game();
 
 	Core core;
+
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
 	std::shared_ptr<ResourceLoader> res;
-	std::vector<GameObject> gameObjects;
+	
+	SDL_Texture * getTexture(char* p);
+	SDL_Texture * getTextTexture(const char*);
+	SDL_Texture * getResource(int);
+	void draw();
+	void update(double);
 
-	SDL_Texture * getTexture(const char* p);
-	TTF_Font * loadFont(const char* p, int size);
 private:
+	std::vector<GAME_STATE> state;
+	std::vector<GameObject> gameObjects;
 	std::array<SDL_Texture*, 10> resources;
 	SDL_Texture * texture;
+	SDL_Colour fontColour;
 	TTF_Font * font;
 
-	SDL_Colour fontColour;
+	void checkInputs();
+	void loadResources();
+
+	int menuWait;
 protected:
 
 };

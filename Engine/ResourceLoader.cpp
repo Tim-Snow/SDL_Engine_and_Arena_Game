@@ -1,15 +1,15 @@
 #include "ResourceLoader.h"
 
-string ResourceLoader::readTextFile(const char* path) {
-	string content;
-	ifstream fileStream(path, ios::in);
+std::string ResourceLoader::readTextFile(const char* t) {
+	std::string content;
+	std::ifstream fileStream(t, std::ios::in);
 
 	if (!fileStream.is_open()) {
-		cerr << "File could not be opened" << endl;
+		std::cerr << "File could not be opened" << std::endl;
 		return "";
 	}
 
-	string line = "";
+	std::string line = "";
 	while (!fileStream.eof()) {
 		getline(fileStream, line);
 		content.append(line + "\n");
@@ -19,10 +19,11 @@ string ResourceLoader::readTextFile(const char* path) {
 	return content;
 }
 
-SDL_Surface * ResourceLoader::loadBMP(const char* path){
-	surf = SDL_LoadBMP(path);
+SDL_Surface * ResourceLoader::loadBMP(const char* i){
+	SDL_Surface * surf = nullptr;
+	surf = SDL_LoadBMP(i);
 	if (surf == nullptr){
-		cout << "error reading in bmp" << endl;
+		std::cout << "Cannot access path for: " << i << std::endl;
 	}
 	return surf;
 }

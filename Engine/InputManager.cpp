@@ -5,22 +5,34 @@ InputManager::InputManager() : run(true){}
 void InputManager::pollEvent(){
 	while (SDL_PollEvent(&event)){
 		switch (event.type){
-			case SDL_QUIT:
-				run = false;
-				break;
-			case SDL_KEYDOWN:
-				keys[event.key.keysym.sym] = true;
-				break;
-			case SDL_KEYUP:
-				keys[event.key.keysym.sym] = false;
-				break;
-			default:
-				break;
+		case SDL_QUIT:
+			run = false;
+			break;
+		case SDL_KEYDOWN:
+			if (event.key.repeat == 0){
+				anyKey = true;
+				keysP[event.key.keysym.sym] = true;
+			}
+			else  {
+				anyKey = false;
+				keysH[event.key.keysym.sym] = true;
+				keysP[event.key.keysym.sym] = false;
+			}
+			break;
+		case SDL_KEYUP:
+			anyKey = false;
+			keysP[event.key.keysym.sym] = false;
+			keysH[event.key.keysym.sym] = false;
+			break;
+		default:
+			break;
 		}
 	}
 }
 
-bool InputManager::isPressed(SDL_Keycode k){  return keys[k];  }
+bool InputManager::isAnyKeyPressed(){  	return anyKey;  }
+bool InputManager::isHeld(SDL_Keycode k){  return keysH[k];  }
+bool InputManager::isPressed(SDL_Keycode k){  return keysP[k]; }
 bool InputManager::checkQuit(){  return run;  }
 
 InputManager::~InputManager(){}

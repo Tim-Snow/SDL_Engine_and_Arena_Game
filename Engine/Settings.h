@@ -6,11 +6,11 @@
 
 class Settings{
 public:
-	map<string, string> settings;
+	std::map<std::string, std::string> settings;
 	void updateSettings();
 	void saveSettings();
 private:
-	string settingsString;
+	std::string settingsString;
 	ResourceLoader loader;
 };
 #endif /* defined  (_SETTINGS_H_) */
