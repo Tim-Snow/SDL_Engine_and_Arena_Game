@@ -5,7 +5,7 @@ const int FRAME_LIMIT = 60;
 const double MS_PER_FRAME = 1.0 / FRAME_LIMIT;
 
 int main(int argc, char **argv){
-	Game game;
+	Game game = Game::instance();
 	game.gfx->setTitle("Arena Game!");
 
 	double lastTime = GetTickCount();
@@ -13,11 +13,11 @@ int main(int argc, char **argv){
 		double currentTime = GetTickCount();
 		double elapsedTime = currentTime - lastTime;
 
-		game.input->pollEvent();
+		game.handleEvent();
 
-		if (elapsedTime >= MS_PER_FRAME){
+		if (elapsedTime >= MS_PER_FRAME)
 			game.update(elapsedTime);
-		}
+		
 		game.draw();
 
 		lastTime = currentTime;

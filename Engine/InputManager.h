@@ -6,14 +6,15 @@
 
 class InputManager{
 public:
-	InputManager();
-	~InputManager();
 
 	void pollEvent();
 	bool isPressed(SDL_Keycode);
 	bool isHeld(SDL_Keycode);
 	bool isAnyKeyPressed();
 	bool checkQuit();
+
+	InputManager();
+	~InputManager();
 private:
 	SDL_Event event;
 	std::map<int, bool> keysP;

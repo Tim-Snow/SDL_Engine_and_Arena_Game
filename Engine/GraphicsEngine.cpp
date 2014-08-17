@@ -33,8 +33,12 @@ void GraphicsEngine::toggleFullscreen(){
 	
 }
 
-void GraphicsEngine::draw(SDL_Texture * t, SDL_Rect r){
-	SDL_RenderCopy(renderer, t, NULL, &r);
+void GraphicsEngine::draw(SDL_Texture * t, SDL_Rect dest){
+	SDL_RenderCopy(renderer, t, NULL, &dest);
+}
+
+void GraphicsEngine::drawFromSpritesheet(SDL_Texture* t, SDL_Rect src, SDL_Rect dest){
+	SDL_RenderCopy(renderer, t, &src, &dest);
 }
 
 void GraphicsEngine::drawFullBG(SDL_Texture * t){
