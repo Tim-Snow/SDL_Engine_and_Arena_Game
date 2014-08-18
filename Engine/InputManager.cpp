@@ -12,13 +12,13 @@ void InputManager::pollEvent(){
 			if (event.key.repeat == 0){
 				anyKey = true;
 				keysP[event.key.keysym.sym] = true;
-			}
-			else  {
+				break;
+			}	else  {
 				anyKey = false;
 				keysH[event.key.keysym.sym] = true;
 				keysP[event.key.keysym.sym] = false;
+				break;
 			}
-			break;
 		case SDL_KEYUP:
 			anyKey = false;
 			keysP[event.key.keysym.sym] = false;
@@ -32,7 +32,7 @@ void InputManager::pollEvent(){
 
 bool InputManager::isAnyKeyPressed(){  	return anyKey;  }
 bool InputManager::isHeld(SDL_Keycode k){  return keysH[k];  }
-bool InputManager::isPressed(SDL_Keycode k){  return keysP[k]; }
+bool InputManager::isPressed(SDL_Keycode k){ return keysP[k]; }
 bool InputManager::checkQuit(){  return run;  }
 
 InputManager::~InputManager(){}
