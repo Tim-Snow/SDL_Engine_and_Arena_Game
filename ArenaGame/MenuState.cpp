@@ -10,8 +10,6 @@ void MenuState::init(){
 }
 
 void MenuState::handleEvent(Game* g){
-	g->input->pollEvent();
-
 	if (g->input->isPressed(SDLK_SPACE))
 		g->pushState(&PlayState::instance());
 

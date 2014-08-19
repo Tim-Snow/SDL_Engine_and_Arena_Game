@@ -32,7 +32,12 @@ void InputManager::pollEvent(){
 
 bool InputManager::isAnyKeyPressed(){  	return anyKey;  }
 bool InputManager::isHeld(SDL_Keycode k){  return keysH[k];  }
-bool InputManager::isPressed(SDL_Keycode k){ return keysP[k]; }
+bool InputManager::isPressed(SDL_Keycode k){
+	if (keysP[k]){
+		keysP[k] = false;
+		return true;
+	} else return false;
+}
 bool InputManager::checkQuit(){  return run;  }
 
 InputManager::~InputManager(){}

@@ -10,6 +10,7 @@ void Game::handleEvent(){
 }
 
 void Game::update(double d){
+	input->pollEvent();
 	state.back()->update(this, d);
 }
 
