@@ -5,38 +5,25 @@
 
 class PlayState : public State{
 public:
-	static PlayState& instance()
-	{
-		static PlayState *instance = new PlayState();
-		return *instance;
-	}
-
-	void init();
+	void init(Game* g);
 	void clean();
 	void handleEvent(Game* g);
 	void draw(Game* g);
 	void update(Game* g, double d);
-protected:
-private:
+	
 	PlayState();
 };
 
 class PauseState : public State{
 public:
-	static PauseState& instance()
-	{
-		static PauseState *instance = new PauseState();
-		return *instance;
-	}
-
-	void init();
+	void init(Game* g);
 	void clean();
 	void handleEvent(Game* g);
 	void draw(Game* g);
 	void update(Game* g, double d);
-protected:
-private:
-	PauseState();
-};
 
+	PauseState();
+private:
+	SDL_Texture * pauseMessage;
+};
 #endif /* defined (_PLAYSTATE_H_)*/

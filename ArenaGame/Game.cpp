@@ -3,6 +3,8 @@
 Game::Game(){
 	gfx = std::shared_ptr<GraphicsEngine>(core.gfxEng);
 	input = std::shared_ptr<InputManager>(core.theInput);
+	gfx->setTitle("Arena Game!");
+	pushState(&titleScreen);
 }
 
 void Game::handleEvent(){
@@ -34,14 +36,23 @@ SDL_Texture * Game::getTextTexture(const char* p, TTF_Font* f, SDL_Color c){
 	return texture;
 }
 
+TTF_Font * Game::getFont(){
+	if (font==nullptr)
+		font = TTF_OpenFont("text.TTF", 64);
+
+	return font;
+}
+
 void Game::pushState(State* s){
 	state.push_back(s);
-	state.back()->init();
+	state.back()->init(this);
 }
 
 void Game::popState(){
-	state.back()->clean();
-	state.pop_back();
+	if (!state.empty()){
+		state.back()->clean();
+		state.pop_back();
+	}
 }
 
 Game::~Game(){

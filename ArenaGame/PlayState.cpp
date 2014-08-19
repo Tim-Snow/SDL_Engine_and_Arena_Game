@@ -4,19 +4,19 @@
 
 PlayState::PlayState(){}
 
-void PlayState::init(){
+void PlayState::init(Game* g){
+	
 }
 
 void PlayState::handleEvent(Game* g){
 	if (g->input->isPressed(SDLK_ESCAPE))
-		g->pushState(&PauseState::instance());
+		g->pushState(&g->pauseGame);
 }
 
 void PlayState::draw(Game* g){
 }
 
 void PlayState::update(Game* g, double d){
-
 }
 
 void PlayState::clean(){
@@ -25,7 +25,8 @@ void PlayState::clean(){
 
 PauseState::PauseState(){}
 
-void PauseState::init(){
+void PauseState::init(Game* g){
+	pauseMessage = g->getTextTexture("PAUSED", g->getFont(), { 255, 255, 255, 255 });
 }
 
 void PauseState::handleEvent(Game* g){
@@ -34,10 +35,11 @@ void PauseState::handleEvent(Game* g){
 }
 
 void PauseState::draw(Game* g){
+	g->gfx->draw(pauseMessage, { 0, 0, 100, 100 });
 }
 
 void PauseState::update(Game* g, double d){
-
+	std::cout << "Paused" << std::endl;
 }
 
 void PauseState::clean(){

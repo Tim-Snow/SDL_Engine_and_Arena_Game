@@ -9,11 +9,7 @@
 
 class Core{
 public:
-	static Core& instance()
-	{
-		static Core *instance = new Core();
-		return *instance;
-	}
+	Core();
 
 	std::shared_ptr<GraphicsEngine> gfxEng;
 	std::shared_ptr<InputManager> theInput;
@@ -21,7 +17,7 @@ public:
 	bool isRunning();
 	void exit();
 private:
-	Core();
+	
 
 	int width, height;
 	bool running;

@@ -11,13 +11,13 @@ class State;
 
 class Game{
 public:
-	static Game* instance()
-	{
-		static Game *instance = new Game();
-		return instance;
-	}
+	Core core;
 
-	Core core = Core::instance();
+	TitleState titleScreen;
+	MenuState mainMenu;
+	MenuState optionsMenu;
+	PlayState playGame;
+	PauseState pauseGame;
 
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
@@ -25,19 +25,21 @@ public:
 	
 	SDL_Texture * getTextTexture(const char*, TTF_Font*, SDL_Color);
 	SDL_Texture * getTexture(char* p);
-
+	TTF_Font	* getFont();
+	
 	void handleEvent();
 	void draw();
 	void update(double);
 
 	void pushState(State*);
 	void popState();
-
+	
+	Game();
 	~Game();
 private:
-	Game();
-
 	std::vector<State*> state;
+
 	SDL_Texture * texture;
+	TTF_Font * font;
 };
 #endif /* defined  (_GAME_H_) */_
