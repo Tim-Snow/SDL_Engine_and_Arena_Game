@@ -72,6 +72,11 @@ void GraphicsEngine::drawRect(int x, int y, int w, int h, int r, int g, int b){
 	SDL_RenderFillRect(renderer, &rect);
 }
 
+void GraphicsEngine::drawRect(SDL_Rect rect, int r, int g, int b){
+	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+	SDL_RenderFillRect(renderer, &rect);
+}
+
 int GraphicsEngine::getWindowHeight(){
 	int h;
 	SDL_GetWindowSize(window, NULL, &h);

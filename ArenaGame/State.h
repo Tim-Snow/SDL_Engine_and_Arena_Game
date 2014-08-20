@@ -2,6 +2,7 @@
 #define STATE_H_
 
 class Game;
+#include <vector>
 #include "../Engine/ResourceLoader.h"
 
 class State{

@@ -24,6 +24,7 @@ public:
 	void setTitle(std::string n);
 	void drawSquare(int x, int y, int w, int r, int g, int b);
 	void drawRect(int x, int y, int w, int h, int r, int g, int b);
+	void drawRect(SDL_Rect rect, int r, int g, int b);
 	
 	GraphicsEngine();
 	~GraphicsEngine();

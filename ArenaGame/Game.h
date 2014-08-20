@@ -40,6 +40,6 @@ private:
 	std::vector<State*> state;
 
 	SDL_Texture * texture;
-	TTF_Font * font;
+	TTF_Font	* font;
 };
 #endif /* defined  (_GAME_H_) */_

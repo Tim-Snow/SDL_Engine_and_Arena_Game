@@ -4,6 +4,21 @@
 #include "State.h"
 #include <array>
 
+enum MENU_COMMANDS { UP, DOWN, LEFT, RIGHT, ACCEPT, BACK, EXIT, NONE };
+
+class MenuButton{
+public:
+	MenuButton(const char*, int, SDL_Rect, SDL_Color, Game* g);
+
+	void draw(Game* g, int);
+	void clean();
+private:
+	int buttonID;
+	SDL_Texture * texture;
+	SDL_Rect position;
+	SDL_Rect outerBorder;
+};
+
 class MenuState : public State{
 public:
 	void init(Game* g);
@@ -16,7 +31,11 @@ public:
 protected:
 
 private:
-	SDL_Texture * mBackground;
-	SDL_Texture * buttons[5];
+	int selectedButton;
+
+	MENU_COMMANDS menuInput;
+	SDL_Texture * background;
+	std::vector<MenuButton> buttons;
+	std::vector<MenuButton>::iterator it;
 };
 #endif /* defined (_MENUSTATE_H_)*/

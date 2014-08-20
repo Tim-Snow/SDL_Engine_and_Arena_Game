@@ -43,4 +43,5 @@ void PauseState::update(Game* g, double d){
 }
 
 void PauseState::clean(){
+	SDL_DestroyTexture(pauseMessage);
 }
