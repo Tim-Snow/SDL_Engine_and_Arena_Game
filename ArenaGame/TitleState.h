@@ -13,9 +13,11 @@ public:
 	
 	TitleState();
 private:
-	SDL_Texture * background;
-	SDL_Texture * title;
-	SDL_Rect middle;
+	SDL_Texture *	background;
+	SDL_Texture *	title;
+	SDL_Rect		titleRect;
+	SDL_Texture *	welcomeMessage;
+	SDL_Rect		welcomeRect;
 	SDL_Color colour;
 	
 	MENU_COMMANDS titleInput;

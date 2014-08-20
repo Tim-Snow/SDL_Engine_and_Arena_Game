@@ -42,11 +42,10 @@ TTF_Font * Game::getFont(){
 	return font;
 }
 
-SDL_Rect Game::setRectToMiddle(int size_){
+SDL_Rect Game::setRectToMiddle(int sizeW_, int sizeH_){
 	int h = gfx->getWindowHeight();
 	int w = gfx->getWindowWidth();
-	int size = size_;
-	return { ((w / 2) - size / 2), ((h / 2) - size / 2), size, size };
+	return{ ((w / 2) - sizeW_ / 2), ((h / 2) - sizeH_ / 2), sizeW_, sizeH_ };
 }
 
 void Game::pushState(State* s){

@@ -4,10 +4,14 @@
 TitleState::TitleState() : titleInput(NONE){}
 
 void TitleState::init(Game* g){
-	colour = { 255, 255, 255, 255 };
-	middle = g->setRectToMiddle(200);
+	colour = { 30, 200, 70, 255 };
+	titleRect = g->setRectToMiddle(350, 130);
+	welcomeRect = titleRect;
+	welcomeRect.y += (titleRect.y + 10);
+	welcomeRect.h -= 75;
 	title = g->getTextTexture("TITLE SCREEN!", g->getFont(), colour);
-	background = g->getTexture("yel.bmp");
+	welcomeMessage = g->getTextTexture("Press any key to continue..", g->getFont(), colour);
+	background = g->getTexture("res/titleBackground.png");
 }
 
 void TitleState::handleEvent(Game* g){
@@ -22,7 +26,8 @@ void TitleState::handleEvent(Game* g){
 
 void TitleState::draw(Game* g){
 	g->gfx->drawFullBG(background);
-	g->gfx->draw(title, middle);
+	g->gfx->draw(title, titleRect);
+	g->gfx->draw(welcomeMessage, welcomeRect);
 }
 
 void TitleState::update(Game* g, double d){
@@ -39,4 +44,5 @@ void TitleState::update(Game* g, double d){
 void TitleState::clean(){
 	SDL_DestroyTexture(title);
 	SDL_DestroyTexture(background);
+	SDL_DestroyTexture(welcomeMessage);
 }

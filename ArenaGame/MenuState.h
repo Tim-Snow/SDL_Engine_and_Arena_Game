@@ -33,6 +33,7 @@ private:
 
 	MENU_COMMANDS menuInput;
 	SDL_Texture * background;
+	SDL_Color menuTextCol;
 	std::vector<MenuButton> buttons;
 	std::vector<MenuButton>::iterator it;
 };

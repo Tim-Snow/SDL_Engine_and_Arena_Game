@@ -1,13 +1,14 @@
 #include "MenuState.h"
 #include "Game.h"
 
-MenuState::MenuState() : selectedButton(1), menuInput(NONE){}
+MenuState::MenuState(){}
 
 void MenuState::init(Game* g){
-	background = g->getTexture("red.bmp");
-	MenuButton playButton	{ "Play",	 1, { 100, 50, 200, 70 }, { 255, 255, 255, 255 }, g };
-	MenuButton optionsButton{ "Options", 2, { 100, 200, 200, 70 }, { 255, 255, 255, 255 }, g };
-	MenuButton exitButton	{ "Exit",	 3, { 100, 350, 200, 70 }, { 255, 255, 255, 255 }, g };
+	background = g->getTexture("res/titleBackground.png");
+	menuTextCol = { 255, 255, 255, 255 };
+	MenuButton playButton	{ "Play",	 1, { 50, 50,  150, 50 }, menuTextCol, g };
+	MenuButton optionsButton{ "Options", 2, { 50, 150, 150, 50 }, menuTextCol, g };
+	MenuButton exitButton	{ "Exit",	 3, { 50, 250, 150, 50 }, menuTextCol, g };
 	buttons.push_back(playButton);
 	buttons.push_back(optionsButton);
 	buttons.push_back(exitButton);
@@ -24,10 +25,10 @@ void MenuState::handleEvent(Game* g){
 	if (g->input->isPressed(SDLK_BACKSPACE))
 		menuInput = BACK;
 
-	if (g->input->isPressed(SDLK_UP) || g->input->isPressed(SDLK_w) || g->input->isPressed(SDLK_LEFT))
+	if (g->input->isPressed(SDLK_UP) || g->input->isPressed(SDLK_LEFT) || g->input->isPressed(SDLK_w) || g->input->isPressed(SDLK_a))
 		menuInput = UP;
 
-	if (g->input->isPressed(SDLK_DOWN) || g->input->isPressed(SDLK_s) || g->input->isPressed(SDLK_RIGHT))
+	if (g->input->isPressed(SDLK_DOWN) || g->input->isPressed(SDLK_RIGHT) || g->input->isPressed(SDLK_s) || g->input->isPressed(SDLK_d))
 		menuInput = DOWN;
 
 	if (g->input->isPressed(SDLK_ESCAPE))

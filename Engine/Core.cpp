@@ -14,7 +14,7 @@ Core::Core(): running(true){
 
 	//minimum resolution of 640x480
 	if (width < 640){ width = 640; gameSettings.settings["screenWidth"] = width; }
-	if (height < 480){ height = 480; gameSettings.settings["screenHeight"] = height; }
+	if (height < 360){ height = 360; gameSettings.settings["screenHeight"] = height; }
 
 	gfxEng->makeWindow(width, height);
 }
