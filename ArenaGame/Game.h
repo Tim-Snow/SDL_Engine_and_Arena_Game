@@ -23,6 +23,7 @@ public:
 	std::shared_ptr<InputManager> input;
 	std::shared_ptr<ResourceLoader> res;
 	
+	SDL_Rect setRectToMiddle(int size);
 	SDL_Texture * getTextTexture(const char*, TTF_Font*, SDL_Color);
 	SDL_Texture * getTexture(char* p);
 	TTF_Font	* getFont();

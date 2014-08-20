@@ -1,6 +1,6 @@
 #include "InputManager.h"
 
-InputManager::InputManager() : run(true){}
+InputManager::InputManager() : run(true), anyKey(false){}
 
 void InputManager::pollEvent(){
 	while (SDL_PollEvent(&event)){
@@ -30,8 +30,16 @@ void InputManager::pollEvent(){
 	}
 }
 
-bool InputManager::isAnyKeyPressed(){  	return anyKey;  }
 bool InputManager::isHeld(SDL_Keycode k){  return keysH[k];  }
+
+bool InputManager::isAnyKeyPressed(){  	
+	if (anyKey){
+		anyKey = false;
+		return true;
+	}
+	else return false;
+}
+
 bool InputManager::isPressed(SDL_Keycode k){
 	if (keysP[k]){
 		keysP[k] = false;

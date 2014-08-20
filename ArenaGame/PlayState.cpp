@@ -4,9 +4,7 @@
 
 PlayState::PlayState(){}
 
-void PlayState::init(Game* g){
-	
-}
+void PlayState::init(Game* g){}
 
 void PlayState::handleEvent(Game* g){
 	if (g->input->isPressed(SDLK_ESCAPE))
@@ -39,7 +37,6 @@ void PauseState::draw(Game* g){
 }
 
 void PauseState::update(Game* g, double d){
-	std::cout << "Paused" << std::endl;
 }
 
 void PauseState::clean(){

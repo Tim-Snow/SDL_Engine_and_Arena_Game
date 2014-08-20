@@ -17,6 +17,8 @@ private:
 	SDL_Texture * title;
 	SDL_Rect middle;
 	SDL_Color colour;
+	
+	MENU_COMMANDS titleInput;
 };
 
 #endif /* defined (_TITLESTATE_H_)*/

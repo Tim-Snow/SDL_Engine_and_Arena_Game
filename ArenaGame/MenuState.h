@@ -4,8 +4,6 @@
 #include "State.h"
 #include <array>
 
-enum MENU_COMMANDS { UP, DOWN, LEFT, RIGHT, ACCEPT, BACK, EXIT, NONE };
-
 class MenuButton{
 public:
 	MenuButton(const char*, int, SDL_Rect, SDL_Color, Game* g);

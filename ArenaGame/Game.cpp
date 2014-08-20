@@ -3,16 +3,15 @@
 Game::Game(){
 	gfx = std::shared_ptr<GraphicsEngine>(core.gfxEng);
 	input = std::shared_ptr<InputManager>(core.theInput);
-	gfx->setTitle("Arena Game!");
 	pushState(&titleScreen);
 }
 
 void Game::handleEvent(){
+	input->pollEvent();
 	state.back()->handleEvent(this);
 }
 
 void Game::update(double d){
-	input->pollEvent();
 	state.back()->update(this, d);
 }
 
@@ -43,8 +42,16 @@ TTF_Font * Game::getFont(){
 	return font;
 }
 
+SDL_Rect Game::setRectToMiddle(int size_){
+	int h = gfx->getWindowHeight();
+	int w = gfx->getWindowWidth();
+	int size = size_;
+	return { ((w / 2) - size / 2), ((h / 2) - size / 2), size, size };
+}
+
 void Game::pushState(State* s){
 	state.push_back(s);
+	handleEvent();
 	state.back()->init(this);
 }
 
@@ -52,6 +59,7 @@ void Game::popState(){
 	if (!state.empty()){
 		state.back()->clean();
 		state.pop_back();
+		handleEvent();
 	}
 }
 

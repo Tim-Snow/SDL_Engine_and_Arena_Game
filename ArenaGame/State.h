@@ -1,6 +1,8 @@
 #ifndef STATE_H_
 #define STATE_H_
 
+enum MENU_COMMANDS { UP, DOWN, LEFT, RIGHT, ACCEPT, BACK, EXIT, NONE };
+
 class Game;
 #include <vector>
 #include "../Engine/ResourceLoader.h"

@@ -1,25 +1,23 @@
 #include "TitleState.h"
 #include "Game.h"
 
-TitleState::TitleState(){}
+TitleState::TitleState() : titleInput(NONE){}
 
 void TitleState::init(Game* g){
-	int h = g->gfx->getWindowHeight();
-	int w = g->gfx->getWindowWidth();
-	int size = 200;
-	middle = { ((w / 2) - size / 2), ((h / 2) - size / 2), size, size }; //SDL rect set to center of screen
 	colour = { 255, 255, 255, 255 };
-
+	middle = g->setRectToMiddle(200);
 	title = g->getTextTexture("TITLE SCREEN!", g->getFont(), colour);
 	background = g->getTexture("yel.bmp");
 }
 
 void TitleState::handleEvent(Game* g){
-	if (g->input->isPressed(SDLK_SPACE))
-		g->pushState(&g->mainMenu);
+	titleInput = NONE;
+
+	if (g->input->isAnyKeyPressed())
+		titleInput = ACCEPT;
 
 	if (g->input->isPressed(SDLK_ESCAPE))
-		g->core.exit();
+		titleInput = EXIT;
 }
 
 void TitleState::draw(Game* g){
@@ -28,6 +26,14 @@ void TitleState::draw(Game* g){
 }
 
 void TitleState::update(Game* g, double d){
+	if (titleInput == ACCEPT){
+		g->pushState(&g->mainMenu);
+		titleInput = NONE;
+	}
+
+	if (titleInput == EXIT){
+		g->core.exit();
+	}
 }
 
 void TitleState::clean(){
