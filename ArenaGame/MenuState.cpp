@@ -17,10 +17,16 @@ void MenuState::handleEvent(Game* g){
 	if (g->input->isPressed(SDLK_BACKSPACE))
 		menuInput = BACK;
 
-	if (g->input->isPressed(SDLK_UP) || g->input->isPressed(SDLK_LEFT) || g->input->isPressed(SDLK_w) || g->input->isPressed(SDLK_a))
+	if (g->input->isPressed(SDLK_UP) || g->input->isPressed(SDLK_w))
 		menuInput = UP;
 
-	if (g->input->isPressed(SDLK_DOWN) || g->input->isPressed(SDLK_RIGHT) || g->input->isPressed(SDLK_s) || g->input->isPressed(SDLK_d))
+	if (g->input->isPressed(SDLK_LEFT) || g->input->isPressed(SDLK_a))
+		menuInput = LEFT;
+
+	if (g->input->isPressed(SDLK_RIGHT) || g->input->isPressed(SDLK_d))
+		menuInput = RIGHT;
+
+	if (g->input->isPressed(SDLK_DOWN) || g->input->isPressed(SDLK_s))
 		menuInput = DOWN;
 
 	if (g->input->isPressed(SDLK_ESCAPE))
@@ -30,25 +36,39 @@ void MenuState::handleEvent(Game* g){
 void MenuState::draw(Game* g){
 	g->gfx->drawFullBG(background);
 
-	for (it = buttons.begin(); it != buttons.end(); ++it){
-		it->draw(g, selectedButton);
+	for (itemIt = items.begin(); itemIt != items.end(); ++itemIt){
+		itemIt->draw(g);
+	}
+
+	for (buttonIt = buttons.begin(); buttonIt != buttons.end(); ++buttonIt){
+		buttonIt->draw(g, selectedButton);
 	}
 }
 
 void MenuState::update(Game* g, double d){
-	if (menuInput == ACCEPT)
+	if (menuInput == ACCEPT){
 		buttons[selectedButton].execute(g);
-	
+		selectedButton = 0;
+	}
 	if (menuInput == BACK){
 		g->popState();
 		menuInput = NONE;
 	}
 
-	if (menuInput == UP && selectedButton != 0)
+	if (menuInput == LEFT  && selectedButton != 0)
 		selectedButton -= 1;
-	if (menuInput == DOWN && selectedButton != (buttons.size()-1))
+	if (menuInput == RIGHT  && selectedButton != (buttons.size() - 1))
 		selectedButton += 1;
 
+	if (menuInput == UP && selectedButton != 0)
+		selectedButton = 0;
+	if (menuInput == DOWN && selectedButton != (buttons.size() - 1)){
+		if (selectedButton == 0)
+			selectedButton += 1;
+
+	selectedButton += 1;
+	}
+	
 	if (menuInput == EXIT)
 		g->core.exit();
 }
@@ -69,13 +89,22 @@ void MenuState::addButton(MenuButton m){
 	buttons.push_back(m);
 }
 
-void MenuState::clean(){
-//	SDL_DestroyTexture(background);
+void MenuState::addItem(MenuItem i){
+	items.push_back(i);
+}
 
-//	while (!buttons.empty()){
-//		buttons.back().clean();
-//		buttons.pop_back();
-//	}
+void MenuState::clean(){
+	SDL_DestroyTexture(background);
+
+	while (!items.empty()){
+		items.back().clean();
+		items.pop_back();
+	}
+
+	while (!buttons.empty()){
+		buttons.back().clean();
+		buttons.pop_back();
+	}
 }
 
 MenuButton::MenuButton(const char* text_, int buttonID_, State* state_, SDL_Rect position_, SDL_Color c, Game* g){
@@ -111,6 +140,9 @@ void MenuButton::draw(Game* g, int i){
 	g->gfx->draw(texture, position);
 }
 
+void MenuItem::draw(Game* g) { 
+	g->gfx->draw(texture, position); 
+}
+
 void MenuButton::clean(){
-	SDL_DestroyTexture(texture);
 }

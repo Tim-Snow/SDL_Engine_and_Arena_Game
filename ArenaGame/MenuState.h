@@ -4,7 +4,19 @@
 #include "State.h"
 #include <array>
 
-class MenuButton{
+class MenuItem{
+public:
+	MenuItem() :texture(nullptr), position({ 0, 0, 0, 0 }){}
+	MenuItem(SDL_Texture* t, SDL_Rect r) { texture = t; position = r; }
+	void draw(Game* g);
+	void clean() { SDL_DestroyTexture(texture); }
+private:
+protected:
+	SDL_Texture * texture;
+	SDL_Rect position;
+};
+
+class MenuButton : public MenuItem{
 public:
 	MenuButton(const char*, int, State*, SDL_Rect, SDL_Color, Game* g);
 
@@ -14,8 +26,6 @@ public:
 private:
 	State* nextState;
 	int buttonID;
-	SDL_Texture * texture;
-	SDL_Rect position;
 	SDL_Rect outerBorder;
 };
 
@@ -31,6 +41,7 @@ public:
 	SDL_Color getTextColour();
 	void setBackgroundImage(SDL_Texture*);
 	void addButton(MenuButton);
+	void addItem(MenuItem);
 	void addTextObect(const char*, SDL_Rect);
 	MenuState();
 private:
@@ -39,7 +50,9 @@ private:
 	MENU_COMMANDS menuInput;
 	SDL_Texture * background;
 	SDL_Color menuTextCol;
+	std::vector<MenuItem> items;
+	std::vector<MenuItem>::iterator itemIt;
 	std::vector<MenuButton> buttons;
-	std::vector<MenuButton>::iterator it;
+	std::vector<MenuButton>::iterator buttonIt;
 };
 #endif /* defined (_MENUSTATE_H_)*/
