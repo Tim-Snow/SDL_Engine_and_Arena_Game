@@ -2,15 +2,13 @@
 #define CORE_H_
 
 #include "InputManager.h"
-#include "Settings.h"
 #include "GraphicsEngine.h"
-
 #include <memory>
 
 class Core{
 public:
 	Core();
-	Settings gameSettings;
+
 	std::shared_ptr<GraphicsEngine> gfxEng;
 	std::shared_ptr<InputManager> theInput;
 
@@ -18,7 +16,7 @@ public:
 	void exit();
 private:
 	int width, height;
-	bool running;
+	bool running, fullscreen;
 };
 
 #endif /* defined  (_CORE_H_) */

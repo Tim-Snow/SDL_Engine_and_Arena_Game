@@ -6,12 +6,21 @@ void GraphicsEngine::setTitle(std::string n){
 	SDL_SetWindowTitle(window, n.c_str());
 }
 
-bool GraphicsEngine::makeWindow(int width, int height){
+bool GraphicsEngine::makeWindow(int width, int height, bool fullscreen_){
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { return false; }
 
 	if (TTF_Init() != 0){ return false; }
-
-	window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+	
+	if (fullscreen_){
+		flags = SDL_WINDOW_FULLSCREEN | SDL_WINDOW_SHOWN;
+		fullWidth = width; fullHeight = height;
+		windowedWidth = 640; windowedHeight = 360;
+	} else {
+		flags = SDL_WINDOW_SHOWN;
+		windowedWidth = width; windowedHeight = height;
+		fullWidth = fullHeight = 0;
+	}
+	window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 	if (window == nullptr) { return false; }
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -23,14 +32,16 @@ bool GraphicsEngine::makeWindow(int width, int height){
 void GraphicsEngine::toggleFullscreen(){
 	if (fullscreen){
 		fullscreen = false;
+		Settings::instance().setSetting("fullscreen", "false");
 		SDL_SetWindowFullscreen(window, SDL_FALSE);
-		SDL_SetWindowSize(window, 640, 480);
+		SDL_SetWindowSize(window, windowedWidth, windowedHeight);
 		SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 	}	else {
 		fullscreen = true;
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		Settings::instance().setSetting("fullscreen", "true");
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		SDL_GetWindowSize(window, &fullWidth, &fullHeight);
 	}
-	
 }
 
 void GraphicsEngine::draw(SDL_Texture * t, SDL_Rect dest){
@@ -42,7 +53,14 @@ void GraphicsEngine::drawFromSpritesheet(SDL_Texture* t, SDL_Rect src, SDL_Rect 
 }
 
 void GraphicsEngine::drawFullBG(SDL_Texture * t){
-	SDL_Rect r = { 0, 0, getWindowWidth(), getWindowHeight() };
+	SDL_Rect r;
+	
+	if (fullscreen){
+		r = { 0, 0, fullWidth, fullHeight };
+	} else {
+		r = { 0, 0, windowedWidth, windowedHeight };
+	}
+
 	SDL_RenderCopy(renderer, t, NULL, &r);
 }
 
@@ -78,19 +96,22 @@ void GraphicsEngine::drawRect(SDL_Rect rect, int r, int g, int b){
 }
 
 int GraphicsEngine::getWindowHeight(){
-	int h;
-	SDL_GetWindowSize(window, NULL, &h);
-	return h;
+	if (fullscreen)
+		return fullHeight;
+	else return windowedHeight;
 }
 
 int GraphicsEngine::getWindowWidth(){
-	int w;
-	SDL_GetWindowSize(window, &w, NULL);
-	return w;
+	if (fullscreen)
+		return fullWidth;
+	else return windowedWidth;
 }
 
-void GraphicsEngine::setWindowSize(int w, int h){
-	SDL_SetWindowSize(window, w, h);
+void GraphicsEngine::setWindowSize(int w_, int h_){
+	windowedWidth = w_; windowedHeight = h_;
+	SDL_SetWindowSize(window, windowedWidth, windowedHeight);
+	Settings::instance().setSetting("screenHeight", windowedHeight);
+	Settings::instance().setSetting("screenWidth", windowedWidth);
 }
 
 GraphicsEngine::~GraphicsEngine(){
