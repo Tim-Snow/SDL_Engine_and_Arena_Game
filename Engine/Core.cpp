@@ -12,7 +12,7 @@ Core::Core(): running(true){
 	std::string h = gameSettings.settings.at("screenHeight");
 	height = atoi(h.c_str());
 
-	//minimum resolution of 640x480
+	//minimum resolution of 640x360 (16:9)
 	if (width < 640){ width = 640; gameSettings.settings["screenWidth"] = width; }
 	if (height < 360){ height = 360; gameSettings.settings["screenHeight"] = height; }
 

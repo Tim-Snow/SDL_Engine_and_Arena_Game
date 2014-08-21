@@ -4,6 +4,20 @@ Game::Game(){
 	gfx = std::shared_ptr<GraphicsEngine>(core.gfxEng);
 	input = std::shared_ptr<InputManager>(core.theInput);
 	pushState(&titleScreen);
+
+	mainMenu.setTextColour({ 255, 255, 255, 255 });
+	mainMenu.setBackgroundImage(getTexture("res/titleBackground.png"));
+	MenuButton playButton	{ "Play",	 0, &playGame,    { 50,  50, 150, 50 }, mainMenu.getTextColour(), this };
+	MenuButton optionsButton{ "Options", 1, &optionsMenu, { 50, 150, 150, 50 }, mainMenu.getTextColour(), this };
+	MenuButton exitButton	{ "Exit",	 2, NULL,		  { 50, 250, 150, 50 }, mainMenu.getTextColour(), this };
+	mainMenu.addButton(playButton);
+	mainMenu.addButton(optionsButton);
+	mainMenu.addButton(exitButton);
+
+	optionsMenu.setTextColour({ 255, 255, 255, 255 });
+	optionsMenu.setBackgroundImage(getTexture("res/titleBackground.png"));
+	MenuButton backButton{ "Back", 0, &goBack, { 50, 50, 150, 50 }, optionsMenu.getTextColour(), this };
+	optionsMenu.addButton(backButton);
 }
 
 void Game::handleEvent(){
@@ -56,7 +70,6 @@ void Game::pushState(State* s){
 
 void Game::popState(){
 	if (!state.empty()){
-		state.back()->clean();
 		state.pop_back();
 		handleEvent();
 	}

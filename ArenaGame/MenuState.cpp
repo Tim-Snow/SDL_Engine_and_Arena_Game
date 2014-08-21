@@ -4,15 +4,7 @@
 MenuState::MenuState(){}
 
 void MenuState::init(Game* g){
-	background = g->getTexture("res/titleBackground.png");
-	menuTextCol = { 255, 255, 255, 255 };
-	MenuButton playButton	{ "Play",	 1, { 50, 50,  150, 50 }, menuTextCol, g };
-	MenuButton optionsButton{ "Options", 2, { 50, 150, 150, 50 }, menuTextCol, g };
-	MenuButton exitButton	{ "Exit",	 3, { 50, 250, 150, 50 }, menuTextCol, g };
-	buttons.push_back(playButton);
-	buttons.push_back(optionsButton);
-	buttons.push_back(exitButton);
-	selectedButton = 1;
+	selectedButton = 0;
 	menuInput = NONE;
 }
 
@@ -44,33 +36,68 @@ void MenuState::draw(Game* g){
 }
 
 void MenuState::update(Game* g, double d){
-	if (selectedButton == 1 && menuInput == ACCEPT)
-		g->pushState(&g->playGame);
+	if (menuInput == ACCEPT)
+		buttons[selectedButton].execute(g);
 	
-	if (menuInput == UP && selectedButton != 1)
-		selectedButton -= 1;
-
-	if (menuInput == DOWN && selectedButton != 3)
-		selectedButton += 1;
-
 	if (menuInput == BACK){
 		g->popState();
 		menuInput = NONE;
 	}
 
-	if (menuInput == EXIT || (menuInput == ACCEPT && selectedButton == 3)){
+	if (menuInput == UP && selectedButton != 0)
+		selectedButton -= 1;
+	if (menuInput == DOWN && selectedButton != (buttons.size()-1))
+		selectedButton += 1;
+
+	if (menuInput == EXIT)
 		g->core.exit();
-	}
 }
 
-MenuButton::MenuButton(const char* text_, int buttonID_, SDL_Rect position_, SDL_Color c, Game* g){
+void MenuState::setBackgroundImage(SDL_Texture* t){
+	background = t;
+}
+
+void MenuState::setTextColour(SDL_Color c){
+	menuTextCol = c;
+}
+
+SDL_Color MenuState::getTextColour(){
+	return menuTextCol;
+}
+
+void MenuState::addButton(MenuButton m){
+	buttons.push_back(m);
+}
+
+void MenuState::clean(){
+//	SDL_DestroyTexture(background);
+
+//	while (!buttons.empty()){
+//		buttons.back().clean();
+//		buttons.pop_back();
+//	}
+}
+
+MenuButton::MenuButton(const char* text_, int buttonID_, State* state_, SDL_Rect position_, SDL_Color c, Game* g){
 	texture = g->getTextTexture(text_, g->getFont(), c);
+	nextState = state_;
 	buttonID = buttonID_;
 	position = position_;
 	outerBorder.h = position.h + 30;
 	outerBorder.w = position.w + 30;
 	outerBorder.x = position.x - 15;
 	outerBorder.y = position.y - 15;
+}
+
+void MenuButton::execute(Game* g){
+	if (nextState == NULL){
+		g->core.exit();
+	} else if(nextState == &g->goBack) {
+		g->popState();
+	}
+	else {
+		g->pushState(nextState);
+	}
 }
 
 void MenuButton::draw(Game* g, int i){
@@ -82,15 +109,6 @@ void MenuButton::draw(Game* g, int i){
 
 	g->gfx->drawRect(position, 0, 0, 0);
 	g->gfx->draw(texture, position);
-}
-
-void MenuState::clean(){
-	SDL_DestroyTexture(background);
-
-	while (!buttons.empty()){
-		buttons.back().clean();
-		buttons.pop_back();
-	}
 }
 
 void MenuButton::clean(){

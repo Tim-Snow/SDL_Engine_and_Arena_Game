@@ -6,11 +6,13 @@
 
 class MenuButton{
 public:
-	MenuButton(const char*, int, SDL_Rect, SDL_Color, Game* g);
+	MenuButton(const char*, int, State*, SDL_Rect, SDL_Color, Game* g);
 
+	void execute(Game* g);
 	void draw(Game* g, int);
 	void clean();
 private:
+	State* nextState;
 	int buttonID;
 	SDL_Texture * texture;
 	SDL_Rect position;
@@ -24,10 +26,13 @@ public:
 	void handleEvent(Game* g);
 	void draw(Game* g);
 	void update(Game* g, double d);
-	
-	MenuState();
-protected:
 
+	void setTextColour(SDL_Color);
+	SDL_Color getTextColour();
+	void setBackgroundImage(SDL_Texture*);
+	void addButton(MenuButton);
+	void addTextObect(const char*, SDL_Rect);
+	MenuState();
 private:
 	int selectedButton;
 

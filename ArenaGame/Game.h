@@ -16,6 +16,7 @@ public:
 	TitleState titleScreen;
 	MenuState mainMenu;
 	MenuState optionsMenu;
+	MenuState goBack;
 	PlayState playGame;
 	PauseState pauseGame;
 

@@ -5,14 +5,12 @@ const float MS_PER_FRAME = 1000.0 / FRAME_LIMIT;
 
 int main(int argc, char **argv){
 	Game game;
-
 	int fps = 0;
 	int elapsedTime, currentTime = 0;
 	int fpsOutTimer = SDL_GetTicks();
 	int lastTime = SDL_GetTicks();
 	
 	while (game.core.isRunning()){
-		
 		currentTime = SDL_GetTicks();
 		elapsedTime = currentTime - lastTime;
 
@@ -20,9 +18,8 @@ int main(int argc, char **argv){
 			game.handleEvent();
 			game.update(elapsedTime);
 			game.draw();
-			fps++;
-		}
-		else {
+			++fps;
+		} else {
 			while (SDL_GetTicks() - currentTime < MS_PER_FRAME){
 				SDL_Delay(1);
 			}
