@@ -25,7 +25,7 @@ bool GraphicsEngine::makeWindow(int width, int height, bool fullscreen_){
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	if (renderer == nullptr) { return false; }
-
+	
 	return true;
 }
 
@@ -94,6 +94,12 @@ void GraphicsEngine::drawRect(SDL_Rect rect, int r, int g, int b){
 	SDL_SetRenderDrawColor(renderer, r, g, b, 255);
 	SDL_RenderFillRect(renderer, &rect);
 }
+
+void GraphicsEngine::drawRect(SDL_Rect rect, SDL_Color c){
+	SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+	SDL_RenderFillRect(renderer, &rect);
+}
+
 
 int GraphicsEngine::getWindowHeight(){
 	if (fullscreen)

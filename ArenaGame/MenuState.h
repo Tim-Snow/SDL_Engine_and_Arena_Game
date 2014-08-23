@@ -6,23 +6,40 @@
 
 class MenuItem{
 public:
-	MenuItem() :texture(nullptr), position({ 0, 0, 0, 0 }){}
-	MenuItem(SDL_Texture* t, SDL_Rect r) { texture = t; position = r; }
-	void draw(Game* g);
-	void clean() { SDL_DestroyTexture(texture); }
-private:
+	void draw(Game* g){}
 protected:
-	SDL_Texture * texture;
+	MenuItem(SDL_Rect position_ = { 0, 0, 0, 0 }) : position(position_){}
 	SDL_Rect position;
 };
 
-class MenuButton : public MenuItem{
+class NoTextureItem : public MenuItem{
+protected:
+	NoTextureItem(SDL_Rect position_, SDL_Color colour_ = { 0, 0, 0, 0 }) : colour(colour_){}
+	void draw(Game* g);
+	
+	SDL_Color colour;
+};
+
+class TextureItem : public MenuItem{
+protected:
+	TextureItem(SDL_Rect position_, const char * text_, SDL_Color colour_, Game* g);
+	TextureItem(SDL_Rect position_, SDL_Texture * texture_ = nullptr) : texture(texture_){}
+	void draw(Game* g);
+	void clean() { SDL_DestroyTexture(texture); }
+	SDL_Texture * texture;
+};
+
+class MenuText : public TextureItem{
+public:
+	MenuText(SDL_Rect position_, const char* text_, SDL_Color, Game* g);
+};
+
+class MenuButton : public TextureItem{
 public:
 	MenuButton(const char*, int, State*, SDL_Rect, SDL_Color, Game* g);
 
 	void execute(Game* g);
 	void draw(Game* g, int);
-	void clean();
 private:
 	State* nextState;
 	int buttonID;

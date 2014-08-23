@@ -52,7 +52,6 @@ void MenuState::update(Game* g, double d){
 	}
 	if (menuInput == BACK){
 		g->popState();
-		menuInput = NONE;
 	}
 
 	if (menuInput == LEFT  && selectedButton != 0)
@@ -77,14 +76,6 @@ void MenuState::setBackgroundImage(SDL_Texture* t){
 	background = t;
 }
 
-void MenuState::setTextColour(SDL_Color c){
-	menuTextCol = c;
-}
-
-SDL_Color MenuState::getTextColour(){
-	return menuTextCol;
-}
-
 void MenuState::addButton(MenuButton m){
 	buttons.push_back(m);
 }
@@ -93,29 +84,41 @@ void MenuState::addItem(MenuItem i){
 	items.push_back(i);
 }
 
+void MenuState::setTextColour(SDL_Color c){
+	menuTextCol = c;
+}
+
+SDL_Color MenuState::getTextColour(){
+	return menuTextCol;
+}
+
 void MenuState::clean(){
 	SDL_DestroyTexture(background);
 
 	while (!items.empty()){
-		items.back().clean();
 		items.pop_back();
 	}
 
 	while (!buttons.empty()){
-		buttons.back().clean();
 		buttons.pop_back();
 	}
 }
 
-MenuButton::MenuButton(const char* text_, int buttonID_, State* state_, SDL_Rect position_, SDL_Color c, Game* g){
-	texture = g->getTextTexture(text_, g->getFont(), c);
+TextureItem::TextureItem(SDL_Rect position_, const char * text_, SDL_Color colour_, Game* g) : MenuItem(position_){
+	texture = g->getTextTexture(text_, g->getFont(), colour_);
+}
+
+MenuButton::MenuButton(const char* text_, int buttonID_, State* state_, SDL_Rect position_, SDL_Color colour_, Game* g) : TextureItem(position_, text_, colour_, g){
 	nextState = state_;
 	buttonID = buttonID_;
-	position = position_;
-	outerBorder.h = position.h + 30;
-	outerBorder.w = position.w + 30;
-	outerBorder.x = position.x - 15;
-	outerBorder.y = position.y - 15;
+	outerBorder.h = position_.h + 30;
+	outerBorder.w = position_.w + 30;
+	outerBorder.x = position_.x - 15;
+	outerBorder.y = position_.y - 15;
+}
+
+MenuText::MenuText(SDL_Rect position_, const char* text_, SDL_Color colour_, Game* g) : TextureItem(position_, text_, colour_, g){
+	texture  = g->getTextTexture(text_, g->getFont(), colour_);
 }
 
 void MenuButton::execute(Game* g){
@@ -140,9 +143,10 @@ void MenuButton::draw(Game* g, int i){
 	g->gfx->draw(texture, position);
 }
 
-void MenuItem::draw(Game* g) { 
-	g->gfx->draw(texture, position); 
+void NoTextureItem::draw(Game* g){
+	g->gfx->drawRect(position, colour);
 }
 
-void MenuButton::clean(){
+void TextureItem::draw(Game* g){
+	g->gfx->draw(texture, position);
 }
