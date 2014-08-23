@@ -8,7 +8,7 @@ void PlayState::init(Game* g){}
 
 void PlayState::handleEvent(Game* g){
 	if (g->input->isPressed(SDLK_ESCAPE))
-		g->pushState(&g->pauseGame);
+		g->pushState(pauseState);
 }
 
 void PlayState::draw(Game* g){

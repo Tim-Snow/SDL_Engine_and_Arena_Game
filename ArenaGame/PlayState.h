@@ -1,7 +1,7 @@
 #ifndef PLAYSTATE_H_
 #define PLAYSTATE_H_
 
-#include "State.h"
+#include "../Engine/MenuSystem.h"
 
 class PlayState : public State{
 public:
@@ -12,9 +12,10 @@ public:
 	void update(Game* g, double d);
 	
 	PlayState();
+	State * pauseState;
 };
 
-class PauseState : public State{
+class PauseState : public MenuSystem{
 public:
 	void init(Game* g);
 	void clean();

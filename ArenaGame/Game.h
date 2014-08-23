@@ -2,8 +2,6 @@
 #define GAME_H_
 
 #include "../Engine/Core.h"
-#include "MenuState.h"
-#include "PlayState.h"
 #include "TitleState.h"
 #include <vector>
 
@@ -14,12 +12,7 @@ public:
 	Core core;
 
 	TitleState titleScreen;
-	MenuState mainMenu;
-	MenuState optionsMenu;
-	MenuState libraryMenu;
-	MenuState goBack;
-	PlayState playGame;
-	PauseState pauseGame;
+	MenuState backState;
 
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;

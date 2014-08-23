@@ -4,22 +4,6 @@ Game::Game(){
 	gfx = std::shared_ptr<GraphicsEngine>(core.gfxEng);
 	input = std::shared_ptr<InputManager>(core.theInput);
 	pushState(&titleScreen);
-
-	mainMenu.setTextColour({ 255, 255, 255, 255 });
-	mainMenu.setBackgroundImage(getTexture("res/titleBackground.png"));
-	MenuButton playButton	{ "Play",	 0, &playGame,	  { 150, gfx->getWindowHeight() - 200, gfx->getWindowWidth()-300, 75 },   mainMenu.getTextColour(), this };
-	MenuButton optionsButton{ "Options", 1, &optionsMenu, { 50, gfx->getWindowHeight() - 75, 150, 50 },							  mainMenu.getTextColour(), this };
-	MenuButton libraryButton{ "Library", 2, &libraryMenu, { (gfx->getWindowWidth()/2)-75, gfx->getWindowHeight() - 75, 150, 50 }, mainMenu.getTextColour(), this };
-	MenuButton exitButton	{ "Exit",	 3, NULL,		  { gfx->getWindowWidth() - 200, gfx->getWindowHeight() - 75, 150, 50 },  mainMenu.getTextColour(), this };
-	mainMenu.addButton(playButton);
-	mainMenu.addButton(optionsButton);
-	mainMenu.addButton(libraryButton);
-	mainMenu.addButton(exitButton);
-
-	optionsMenu.setTextColour({ 255, 255, 255, 255 });
-	optionsMenu.setBackgroundImage(getTexture("res/titleBackground.png"));
-	MenuButton backButton{ "Back", 0, &goBack, { 50, 50, 150, 50 }, optionsMenu.getTextColour(), this };
-	optionsMenu.addButton(backButton);
 }
 
 void Game::handleEvent(){
