@@ -9,6 +9,7 @@
 class GraphicsEngine{
 public:
 	SDL_Texture * makeTextureFromSurf(SDL_Surface * s);
+	SDL_Texture * makeTextureFromSpritesheet(SDL_Surface * s, SDL_Rect);
 	SDL_Texture * getTextTexture(const char*, TTF_Font*, SDL_Color);
 	TTF_Font	* getFont();
 	
@@ -36,8 +37,10 @@ public:
 	GraphicsEngine();
 	~GraphicsEngine();
 private:
-	int windowedWidth, windowedHeight, fullWidth, fullHeight;
+	int ratio, widthMult, heightMult;
+	int windowedWidth, windowedHeight;
 	Uint32 flags;
+	SDL_DisplayMode currentDisplay;
 
 	SDL_Window	*	window;
 	SDL_Renderer*	renderer;

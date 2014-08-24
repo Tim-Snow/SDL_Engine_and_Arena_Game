@@ -12,7 +12,6 @@ public:
 	Core core;
 
 	TitleState titleScreen;
-	MenuState acceptState;
 	MenuState backState;
 
 	std::shared_ptr<GraphicsEngine> gfx;

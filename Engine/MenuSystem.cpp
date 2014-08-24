@@ -1,8 +1,6 @@
 #include "MenuSystem.h"
 #include "../ArenaGame/Game.h"
 
-MenuSystem::MenuSystem() : selectedButton(0), menuInput(NONE){}
-
 void MenuSystem::init(Game* g){}
 
 void MenuSystem::handleEvent(Game* g){
@@ -66,24 +64,15 @@ void MenuSystem::update(Game* g, double d){
 	}
 }
 
-void MenuSystem::setBackgroundImage(SDL_Texture* t){
-	background = t;
-}
-
 void MenuSystem::addButton(ExecutableMenuItem * m){
+	m->setBackgroundColour(itemBgCol);
+	m->setBorderCol(borderCol);
+	m->setSelBorderCol(selBorderCol);
 	buttons.push_back(m);
 }
 
 void MenuSystem::addItem(MenuItem* i){
 	items.push_back(i);
-}
-
-void MenuSystem::setTextColour(SDL_Color c){
-	menuTextCol = c;
-}
-
-SDL_Color MenuSystem::getTextColour(){
-	return menuTextCol;
 }
 
 void MenuSystem::clean(){

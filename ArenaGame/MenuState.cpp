@@ -3,17 +3,28 @@
 
 void MenuState::init(Game* g){
 	setBackgroundImage(g->getTexture("res/titleBackground.png"));
-	setTextColour({ 30, 200, 30, 255 });
+	setTextColour({ 30, 200, 60, 255 });
+	setBorderColour({0, 100, 0, 55});
+	setSelBorderColour({ 60, 255, 100, 255 });
+	setItemBgColour({ 30, 30, 155, 255 });
 
-	SDL_Rect posRect = { (g->gfx->getWindowWidth()/2) - 75, g->gfx->getWindowHeight() - 160 ,150, 50 };
-	MenuButton * playButton = new MenuButton{ "PLAY", 0, &playState, posRect, getTextColour(), g };
+	SDL_Rect posRect = { (g->gfx->getWindowWidth() / 2) - 75, g->gfx->getWindowHeight() - 160, 150, 50 };
+
+
+	playButton = new MenuButton();
+	playButton->setID(0).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("PLAY", g).setState(&charSelect);
 	posRect.y += 90;
 	posRect.x -= 200;
-	MenuButton * optionsButton = new MenuButton{ "OPTIONS", 1, &optionsState, posRect, getTextColour(), g };
+	optionsButton = new MenuButton();
+	optionsButton->setID(1).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("OPTIONS", g).setState(&optionsState);
 	posRect.x += 200;
-	MenuButton * libraryButton = new MenuButton{ "LIBRARY", 2, &libraryState, posRect, getTextColour(), g };
+	libraryButton = new MenuButton();
+	libraryButton->setID(2).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("LIBRARY", g).setState(&libraryState);
 	posRect.x += 200;
-	MenuButton * exitButton = new MenuButton{ "EXIT", 3, NULL, posRect, getTextColour(), g };
+	exitButton = new MenuButton();
+	exitButton->setID(3).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("EXIT", g);
+
+
 	addButton(playButton);
 	addButton(optionsButton);
 	addButton(libraryButton);
@@ -22,33 +33,35 @@ void MenuState::init(Game* g){
 
 void OptionsState::init(Game* g){
 	setBackgroundImage(g->getTexture("res/titleBackground.png"));
-	setTextColour({ 30, 200, 30, 255 });
-
-
+	setTextColour({ 30, 200, 60, 255 });
+	setBorderColour({ 0, 100, 0, 55 });
+	setSelBorderColour({ 60, 255, 100, 255 });
+	setItemBgColour({ 30, 30, 155, 255 });
+	
+	
 	posRect = { 40, 95, 150, 50 };
-	TextureItem * fullscreen = new TextureItem{ posRect, "Fullscreen", getTextColour(), g };
-
+	fullscreen = new TextureItem{ posRect, "Fullscreen", getTextColour(), g };
 	posRect.y += 60;
-	TextureItem * res = new TextureItem{ posRect, "Resolution", getTextColour(), g };
+	res = new TextureItem{ posRect, "Resolution", getTextColour(), g };
 	posRect = { g->gfx->getWindowWidth() / 2 - 100, 10, 200, 75 };
 	title = new TextureItem{ posRect, "OPTIONS", getTextColour(), g };
 	posRect = { g->gfx->getWindowWidth() - 190, 95, 150, 50 };
 
 
-	fullscreenTog = new ToggleButton{ 0, posRect, { 255, 255, 255, 255 }, { 0, 0, 0, 255 } };
+	fullscreenTog = new ToggleButton{ 0, posRect, { 0, 255, 0, 255 }, { 255, 0, 0, 255 } };
 
 	if (Settings::instance().getSetting("fullscreen") == "true"){
 		fullscreenTog->setToggle(true);
 	}	else {
 		fullscreenTog->setToggle(false);
 	}
-
 	posRect = { g->gfx->getWindowWidth() / 2 - 100, g->gfx->getWindowHeight() - 70, 80, 50 };
-	acceptButton = new MenuButton{ "ACCEPT", 1, &g->acceptState, posRect, getTextColour(), g };
-
+	acceptButton = new MenuButton();
+	acceptButton->setID(1).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("ACCEPT", g).setState(&g->backState);
 	posRect = { g->gfx->getWindowWidth()/2 + 20, g->gfx->getWindowHeight() - 70, 80, 50 };
-	MenuButton * backButton = new MenuButton{ "BACK", 2, &g->backState, posRect, getTextColour(), g };
-	
+	backButton = new MenuButton();
+	backButton->setID(2).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("BACK", g).setState(&g->backState);
+
 	addItem(title);
 	addItem(fullscreen);
 	addItem(res);
@@ -99,11 +112,16 @@ void OptionsState::update(Game* g, double d){
 
 void LibraryState::init(Game* g){
 	setBackgroundImage(g->getTexture("res/titleBackground.png"));
-	setTextColour({ 30, 200, 30, 255 });
+	setTextColour({ 30, 200, 60, 255 });
+	setBorderColour({ 0, 100, 0, 55 });
+	setSelBorderColour({ 60, 255, 100, 255 });
+	setItemBgColour({ 30, 30, 155, 255 });
+	
 	SDL_Rect posRect = { g->gfx->getWindowWidth() / 2 - 100, 10, 200, 75 };
-	TextureItem * title = new TextureItem{ posRect, "LIBRARY", getTextColour(), g};
+	title = new TextureItem{ posRect, "LIBRARY", getTextColour(), g};
 	posRect = { g->gfx->getWindowWidth() / 2 - 40, g->gfx->getWindowHeight()-70, 80, 50 };
-	MenuButton * backButton = new MenuButton{ "BACK", 0, &g->backState, posRect, getTextColour(), g };
+	backButton = new MenuButton();
+	backButton->setID(0).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("BACK", g).setState(&g->backState);
 	addItem(title);
 	addButton(backButton);
 }
