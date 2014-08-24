@@ -12,6 +12,21 @@ std::string Settings::getSetting(std::string id){
 	return settings.at(id);
 }
 
+void Settings::addResolution(int w, int h){
+	bool unique = true;
+	for (auto r : resolutions){
+		if ((r.getH() == h) && (r.getW() == w)){
+			unique = false;
+		}
+	}
+
+	if (unique){
+		Resolution res(w, h);
+		resolutions.push_back(res);
+		std::cout << "Resolution added: " << w << ":" << h << std::endl;
+	}
+}
+
 //Reads game settings from ini file
 void Settings::updateSettings(){
 	std::ifstream fileStream("settings.ini", std::ifstream::in);

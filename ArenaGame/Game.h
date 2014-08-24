@@ -12,21 +12,20 @@ public:
 	Core core;
 
 	TitleState titleScreen;
+	MenuState acceptState;
 	MenuState backState;
 
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
 	std::shared_ptr<ResourceLoader> res;
 	
-	SDL_Rect setRectToMiddle(int sizeW, int sizeH);
-	SDL_Texture * getTextTexture(const char*, TTF_Font*, SDL_Color);
 	SDL_Texture * getTexture(char* p);
-	TTF_Font	* getFont();
-	
+
 	void handleEvent();
 	void draw();
 	void update(double);
 
+	State * getState() { return state.back(); }
 	void pushState(State*);
 	void popState();
 	
@@ -36,6 +35,6 @@ private:
 	std::vector<State*> state;
 
 	SDL_Texture * texture;
-	TTF_Font	* font;
+
 };
 #endif /* defined  (_GAME_H_) */_

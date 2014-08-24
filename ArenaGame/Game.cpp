@@ -17,6 +17,7 @@ void Game::update(double d){
 
 void Game::draw(){
 		gfx->clearDisplay();
+
 		state.back()->draw(this);
 		gfx->updateDisplay();
 }
@@ -28,26 +29,6 @@ SDL_Texture * Game::getTexture(char* p){
 	return texture;
 }
 
-SDL_Texture * Game::getTextTexture(const char* p, TTF_Font* f, SDL_Color c){
-	SDL_Surface * surf = TTF_RenderText_Blended(f, p, c);
-	texture = gfx->makeTextureFromSurf(surf);
-	SDL_FreeSurface(surf);
-	return texture;
-}
-
-TTF_Font * Game::getFont(){
-	if (font==nullptr)
-		font = TTF_OpenFont("text.TTF", 64);
-
-	return font;
-}
-
-SDL_Rect Game::setRectToMiddle(int sizeW_, int sizeH_){
-	int h = gfx->getWindowHeight();
-	int w = gfx->getWindowWidth();
-	return{ ((w / 2) - sizeW_ / 2), ((h / 2) - sizeH_ / 2), sizeW_, sizeH_ };
-}
-
 void Game::pushState(State* s){
 	state.push_back(s);
 	handleEvent();
@@ -56,6 +37,7 @@ void Game::pushState(State* s){
 
 void Game::popState(){
 	if (!state.empty()){
+		state.back()->clean();
 		state.pop_back();
 		handleEvent();
 	}

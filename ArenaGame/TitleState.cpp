@@ -5,9 +5,9 @@ void TitleState::init(Game* g){
 	setBackgroundImage(g->getTexture("res/titleBackground.png"));
 	setTextColour({ 30, 200, 30, 255 });
 
-	SDL_Rect mid = g->setRectToMiddle(250, 150);
+	SDL_Rect mid = g->gfx->setRectToMiddle(350, 150);
 	TextureItem * titleMessage = new TextureItem{ mid, "Arena Game", getTextColour(), g };
-	mid = g->setRectToMiddle(200, 50);
+	mid = g->gfx->setRectToMiddle(200, 50);
 	mid.y += 100;
 	TextureItem * welcomeMessage = new TextureItem{ mid, "Press any key..!", getTextColour(), g };
 	

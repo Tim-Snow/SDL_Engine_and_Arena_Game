@@ -34,39 +34,43 @@ void MenuSystem::draw(Game* g){
 		item->draw(g);
 	}
 
-	for (buttonIt = buttons.begin(); buttonIt != buttons.end(); ++buttonIt){
-		buttonIt->draw(g, selectedButton);
+	for (auto button: buttons){
+		button->draw(g, selectedButton);
 	}
 }
 
 void MenuSystem::update(Game* g, double d){
-	if (menuInput == ACCEPT){
-		buttons[selectedButton].execute(g);
+	switch (menuInput){
+	case ACCEPT:
+		buttons[selectedButton]->execute(g);
 		selectedButton = 0;
-	}
-
-	if (menuInput == BACK){
+		break;
+	case BACK:
 		g->popState();
-	}
-
-	if (menuInput == LEFT  && selectedButton != 0)
-		selectedButton -= 1;
-	if (menuInput == RIGHT  && selectedButton != (buttons.size() - 1))
-		selectedButton += 1;
-	if (menuInput == UP && selectedButton != 0)
-		selectedButton = 0;
-	if (menuInput == DOWN && selectedButton != (buttons.size() - 1))
-		selectedButton += 1;
-	
-	if (menuInput == EXIT)
+		break;
+	case LEFT:
+	case UP:
+		if (selectedButton != 0)
+			selectedButton--;
+		break;
+	case RIGHT:
+	case DOWN:
+		if (selectedButton != (buttons.size() - 1))
+			selectedButton++;
+		break;
+	case EXIT:
 		g->core.exit();
+		break;
+	default:
+		break;
+	}
 }
 
 void MenuSystem::setBackgroundImage(SDL_Texture* t){
 	background = t;
 }
 
-void MenuSystem::addButton(MenuButton m){
+void MenuSystem::addButton(ExecutableMenuItem * m){
 	buttons.push_back(m);
 }
 
@@ -85,50 +89,12 @@ SDL_Color MenuSystem::getTextColour(){
 void MenuSystem::clean(){
 	SDL_DestroyTexture(background);
 
-	for (auto item : items){
-		item->clean();
+	while (!items.empty()){
+		items.back()->clean();
+		items.pop_back();
 	}
-
 	while (!buttons.empty()){
-		buttons.back().clean();
+		buttons.back()->clean();
 		buttons.pop_back();
 	}
-}
-
-TextureItem::TextureItem(SDL_Rect position_, const char * text_, SDL_Color colour_, Game* g) : MenuItem(position_){
-	texture = g->getTextTexture(text_, g->getFont(), colour_);
-}
-
-MenuButton::MenuButton(const char* text_, int buttonID_, State* state_, SDL_Rect position_, SDL_Color colour_, Game* g) : TextureItem(position_, text_, colour_, g){
-	nextState = state_;
-	buttonID = buttonID_;
-	outerBorder.h = position_.h + 30;
-	outerBorder.w = position_.w + 30;
-	outerBorder.x = position_.x - 15;
-	outerBorder.y = position_.y - 15;
-}
-
-void MenuButton::execute(Game* g){
-	if (nextState == NULL){	g->core.exit();	} 
-	else if (nextState == &g->backState){ g->popState(); }
-	else { g->pushState(nextState); }
-}
-
-void MenuButton::draw(Game* g, int i){
-	if (i == buttonID){
-		g->gfx->drawRect(outerBorder, 255, 255, 255);
-	} else {
-		g->gfx->drawRect(outerBorder, 30, 30, 30);
-	}
-
-	g->gfx->drawRect(position, 0, 0, 0);
-	g->gfx->draw(texture, position);
-}
-
-void NoTextureItem::draw(Game* g){
-	g->gfx->drawRect(position, colour);
-}
-
-void TextureItem::draw(Game* g){
-	g->gfx->draw(texture, position);
 }

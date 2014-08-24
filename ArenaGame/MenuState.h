@@ -7,8 +7,15 @@
 class OptionsState : public MenuSystem{
 public:
 	void init(Game* g);
+	void update(Game* g, double d);
 
+	MenuButton * acceptButton;
+	MenuButton * backButton;
+	TextureItem * title;
 	OptionsState(){}
+private:
+	SDL_Rect posRect;
+	ToggleButton * fullscreenTog;
 };
 
 class LibraryState : public MenuSystem{

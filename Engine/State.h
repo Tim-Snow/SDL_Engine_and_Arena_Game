@@ -11,7 +11,7 @@ class State{
 public:
 	virtual void init(Game* g) = 0;
 	virtual void clean() = 0;
-	
+
 	virtual void handleEvent(Game* g) = 0;
 	virtual void draw(Game* g) = 0;
 	virtual void update(Game* g, double d) = 0;

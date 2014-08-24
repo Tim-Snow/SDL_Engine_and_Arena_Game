@@ -24,7 +24,7 @@ void PlayState::clean(){
 PauseState::PauseState(){}
 
 void PauseState::init(Game* g){
-	pauseMessage = g->getTextTexture("PAUSED", g->getFont(), { 255, 255, 255, 255 });
+	pauseMessage = g->gfx->getTextTexture("PAUSED", g->gfx->getFont(), { 255, 255, 255, 255 });
 }
 
 void PauseState::handleEvent(Game* g){
