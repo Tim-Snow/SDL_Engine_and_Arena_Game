@@ -6,9 +6,9 @@
 
 class CharSelectState : public MenuSystem{
 public:
-	void init(Game* g);
-	void update(Game* g, double d);
-	void draw(Game* g);
+	void init();
+	void update(double d);
+	void draw();
 	CharSelectState();
 	SDL_Texture * t;
 

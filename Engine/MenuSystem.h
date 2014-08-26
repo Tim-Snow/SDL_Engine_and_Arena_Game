@@ -7,11 +7,11 @@
 
 class MenuSystem : public State{
 public:
-	virtual void init(Game* g);
+	virtual void init();
 	virtual void clean();
-	virtual void handleEvent(Game* g);
-	virtual void draw(Game* g);
-	virtual void update(Game* g, double d);
+	virtual void handleEvent();
+	virtual void draw();
+	virtual void update(double d);
 
 	SDL_Color getTextColour(){ return menuTextCol; }
 	SDL_Color getBorderColour(){ return borderCol; }

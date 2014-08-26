@@ -1,37 +1,43 @@
 #include "TitleState.h"
-#include "Game.h"
 
-void TitleState::init(Game* g){
-	setBackgroundImage(g->getTexture("res/titleBackground.png"));
+void goToMenu(){
+	MenuState * mainMenu = new MenuState();
+	StateManager::instance().pushState(mainMenu);
+}
+
+void TitleState::init(){
+	setBackgroundImage(gfx->makeTextureFromSurf(ResourceLoader::instance().loadImage("res/titleBackground.png")));
 	setTextColour({ 30, 200, 30, 255 });
 
-	SDL_Rect mid = g->gfx->setRectToMiddle(350, 150);
-	TextureItem * titleMessage = new TextureItem{ mid, "Arena Game", getTextColour(), g };
-	mid = g->gfx->setRectToMiddle(200, 50);
+	SDL_Rect mid = gfx->setRectToMiddle(350, 150);
+	TextureItem * titleMessage = new TextureItem();
+	titleMessage->setTexture("Arena Game!", getTextColour(), gfx).setPosition(mid);
+	mid = gfx->setRectToMiddle(200, 50);
 	mid.y += 100;
-	TextureItem * welcomeMessage = new TextureItem{ mid, "Press any key..!", getTextColour(), g };
+	TextureItem * welcomeMessage = new TextureItem();
+	welcomeMessage->setTexture("Press any key..!", getTextColour(), gfx).setPosition(mid);
 	
 	addItem(titleMessage);
 	addItem(welcomeMessage);
 }
 
-void TitleState::handleEvent(Game* g){
-	titleInput = NONE;
+void TitleState::handleEvent(){
+	menuInput = NONE;
 
-	if (g->input->isAnyKeyPressed())
-		titleInput = ACCEPT;
+	if (input->isAnyKeyPressed())
+		menuInput = ACCEPT;
 
-	if (g->input->isPressed(SDLK_ESCAPE))
-		titleInput = EXIT;
+	if (input->isPressed(SDLK_ESCAPE))
+		menuInput = EXIT;
 }
 
-void TitleState::update(Game* g, double d){
-	if (titleInput == ACCEPT){
-		g->pushState(&mainMenu);
-		titleInput = NONE;
+void TitleState::update(double d){
+	if (menuInput == ACCEPT){
+		goToMenu();
 	}
 
-	if (titleInput == EXIT){
-		g->core.exit();
+	if (menuInput == EXIT){
+		input->quit();
 	}
+
 }

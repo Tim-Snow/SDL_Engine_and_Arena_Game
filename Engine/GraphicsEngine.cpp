@@ -130,7 +130,6 @@ SDL_Texture* GraphicsEngine::makeTextureFromSpritesheet(SDL_Surface * s, SDL_Rec
 	return texture;
 }
 
-
 SDL_Texture * GraphicsEngine::getTextTexture(const char* p, TTF_Font* f, SDL_Color c){
 	SDL_Surface * surf = TTF_RenderText_Blended(f, p, c);
 	texture = makeTextureFromSurf(surf);

@@ -2,7 +2,6 @@
 
 Core::Core(): running(true){
 	gfxEng = std::shared_ptr<GraphicsEngine>(new GraphicsEngine());
-	theInput = std::shared_ptr<InputManager>(new InputManager());
 
 	Settings::instance().updateSettings();
 

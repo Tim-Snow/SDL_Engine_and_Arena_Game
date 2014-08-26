@@ -10,7 +10,7 @@ public:
 	Core();
 
 	std::shared_ptr<GraphicsEngine> gfxEng;
-	std::shared_ptr<InputManager> theInput;
+	std::shared_ptr<InputManager> theInput = InputManager::instance();
 
 	bool isRunning();
 	void exit();

@@ -1,5 +1,4 @@
 #include "InputManager.h"
-
 InputManager::InputManager() : run(true), anyKey(false){}
 
 void InputManager::pollEvent(){
@@ -46,6 +45,6 @@ bool InputManager::isPressed(SDL_Keycode k){
 		return true;
 	} else return false;
 }
-bool InputManager::checkQuit(){  return run;  }
 
+bool InputManager::checkQuit(){  return run;  }
 InputManager::~InputManager(){}

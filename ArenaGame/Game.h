@@ -2,6 +2,7 @@
 #define GAME_H_
 
 #include "../Engine/Core.h"
+//#include "../Engine/StateManager.h"
 #include "TitleState.h"
 #include <vector>
 
@@ -12,7 +13,6 @@ public:
 	Core core;
 
 	TitleState titleScreen;
-	MenuState backState;
 
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
@@ -24,16 +24,11 @@ public:
 	void draw();
 	void update(double);
 
-	State * getState() { return state.back(); }
-	void pushState(State*);
-	void popState();
+
 	
 	Game();
 	~Game();
 private:
-	std::vector<State*> state;
-
 	SDL_Texture * texture;
-
 };
 #endif /* defined  (_GAME_H_) */_

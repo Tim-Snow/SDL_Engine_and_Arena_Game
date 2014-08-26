@@ -28,10 +28,9 @@ public:
 	void updateSettings();
 	void saveSettings();
 private:
-	Settings(){  }
+	Settings(){}
 
 	std::vector<Resolution> resolutions;
 	std::map<std::string, std::string> settings;
-
 };
 #endif /* defined  (_SETTINGS_H_) */

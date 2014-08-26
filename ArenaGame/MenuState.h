@@ -6,9 +6,8 @@
 
 class OptionsState : public MenuSystem{
 public:
-	void init(Game* g);
-	void update(Game* g, double d);
-	
+	void init();
+
 	OptionsState(){}
 private:
 	MenuButton		* acceptButton;
@@ -22,17 +21,18 @@ private:
 
 class LibraryState : public MenuSystem{
 public:
-	void init(Game* g);
+	void init();
 
+	LibraryState(){}
+private:
 	TextureItem * title;
 	MenuButton * backButton;
 
-	LibraryState(){}
 };
 
 class MenuState : public MenuSystem{
 public:
-	void init(Game* g);
+	void init();
 	
 	MenuState(){}
 private:

@@ -1,50 +1,54 @@
 #include "MenuSystem.h"
 #include "../ArenaGame/Game.h"
 
-void MenuSystem::init(Game* g){}
+void MenuSystem::init(){}
 
-void MenuSystem::handleEvent(Game* g){
+void MenuSystem::handleEvent(){
 	menuInput = NONE;
 
-	if (g->input->isPressed(SDLK_SPACE) || g->input->isPressed(SDLK_RETURN))
+	if (input->isPressed(SDLK_SPACE) || input->isPressed(SDLK_RETURN))
 		menuInput = ACCEPT;
 
-	if (g->input->isPressed(SDLK_ESCAPE))
+	if (input->isPressed(SDLK_ESCAPE))
 		menuInput = BACK;
 
-	if (g->input->isPressed(SDLK_UP) || g->input->isPressed(SDLK_w))
+	if (input->isPressed(SDLK_UP) || input->isPressed(SDLK_w))
 		menuInput = UP;
 
-	if (g->input->isPressed(SDLK_LEFT) || g->input->isPressed(SDLK_a))
+	if (input->isPressed(SDLK_LEFT) || input->isPressed(SDLK_a))
 		menuInput = LEFT;
 
-	if (g->input->isPressed(SDLK_RIGHT) || g->input->isPressed(SDLK_d))
+	if (input->isPressed(SDLK_RIGHT) || input->isPressed(SDLK_d))
 		menuInput = RIGHT;
 
-	if (g->input->isPressed(SDLK_DOWN) || g->input->isPressed(SDLK_s))
+	if (input->isPressed(SDLK_DOWN) || input->isPressed(SDLK_s))
 		menuInput = DOWN;
 }
 
-void MenuSystem::draw(Game* g){
-	g->gfx->drawFullBG(background);
+void MenuSystem::draw(){
+	gfx->drawFullBG(background);
 
 	for (auto item: items){
-		item->draw(g);
+		item->draw(gfx);
 	}
 
 	for (auto button: buttons){
-		button->draw(g, selectedButton);
+		button->draw(gfx, selectedButton);
 	}
 }
 
-void MenuSystem::update(Game* g, double d){
+void MenuSystem::update(double d){
 	switch (menuInput){
 	case ACCEPT:
-		buttons[selectedButton]->execute(g);
-		selectedButton = 0;
+		for (auto button : buttons){
+			if (button->getID() == selectedButton){
+				buttons[selectedButton]->execute();
+				selectedButton = 0;
+			}
+		}
 		break;
 	case BACK:
-		g->popState();
+		StateManager::instance().popState();
 		break;
 	case LEFT:
 	case UP:
@@ -57,7 +61,7 @@ void MenuSystem::update(Game* g, double d){
 			selectedButton++;
 		break;
 	case EXIT:
-		g->core.exit();
+		InputManager::instance()->quit();
 		break;
 	default:
 		break;

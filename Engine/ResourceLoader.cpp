@@ -1,13 +1,5 @@
 #include "ResourceLoader.h"
 
-ResourceLoader::ResourceLoader(){
-	IMG_Init(IMG_INIT_PNG);
-}
-
-ResourceLoader::~ResourceLoader(){
-	IMG_Quit();
-}
-
 std::string ResourceLoader::readTextFile(const char* t) {
 	std::string content;
 	std::ifstream fileStream(t, std::ios::in);

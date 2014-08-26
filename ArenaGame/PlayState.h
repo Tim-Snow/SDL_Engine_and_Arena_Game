@@ -5,23 +5,25 @@
 
 class PlayState : public State{
 public:
-	void init(Game* g);
+	void init();
 	void clean();
-	void handleEvent(Game* g);
-	void draw(Game* g);
-	void update(Game* g, double d);
-	
+
+	void handleEvent();
+	void draw();
+	void update(double d);
+		
 	PlayState();
 	State * pauseState;
 };
 
 class PauseState : public MenuSystem{
 public:
-	void init(Game* g);
+	void init();
 	void clean();
-	void handleEvent(Game* g);
-	void draw(Game* g);
-	void update(Game* g, double d);
+
+	void handleEvent();
+	void draw();
+	void update(double d);
 
 	PauseState();
 private:

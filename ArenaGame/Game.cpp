@@ -3,52 +3,29 @@
 Game::Game(){
 	gfx = std::shared_ptr<GraphicsEngine>(core.gfxEng);
 	input = std::shared_ptr<InputManager>(core.theInput);
-	pushState(&titleScreen);
+	StateManager::instance().setup(gfx, input);
+	StateManager::instance().pushState(&titleScreen);
 }
 
 void Game::handleEvent(){
 	input->pollEvent();
-	state.back()->handleEvent(this);
+	StateManager::instance().getState()->handleEvent();
 }
 
 void Game::update(double d){
-	state.back()->update(this, d);
+	StateManager::instance().getState()->update(d);
 }
 
 void Game::draw(){
 		gfx->clearDisplay();
 
-		state.back()->draw(this);
+		StateManager::instance().getState()->draw();
 		gfx->updateDisplay();
 }
 
-SDL_Texture * Game::getTexture(char* p){
-	SDL_Surface* s = res->loadImage(p);
-	texture = gfx->makeTextureFromSurf(s);
-	SDL_FreeSurface(s);
-	return texture;
-}
-
-void Game::pushState(State* s){
-	state.push_back(s);
-	handleEvent();
-	state.back()->init(this);
-}
-
-void Game::popState(){
-	if (!state.empty()){
-		state.back()->clean();
-		state.pop_back();
-		handleEvent();
-	}
-}
 
 Game::~Game(){
-	while (!state.empty()){
-		state.back()->clean();
-		state.pop_back();
-	}
-
+	StateManager::instance().clean();
 	SDL_DestroyTexture(texture);
 	core.exit();
 }

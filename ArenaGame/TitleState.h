@@ -1,17 +1,16 @@
 #ifndef TITLESTATE_H_
 #define TITLESTATE_H_
 
-#include "../Engine/MenuSystem.h"
 #include "MenuState.h"
+#include "../Engine/MenuSystem.h"
 
 class TitleState : public MenuSystem{
 public:
-	void init(Game* g);
-	void handleEvent(Game* g);
-	void update(Game* g, double d);
+	void init();
+	void handleEvent();
+	void update(double d);
 
 	TitleState(){}
-	MenuState mainMenu;
 private:
 	MENU_COMMANDS titleInput;
 };
