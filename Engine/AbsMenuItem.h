@@ -78,8 +78,8 @@ public:
 	virtual void clean() {}
 
 	virtual ExecutableMenuItem &setBackgroundColour(SDL_Color c){ colour = c; return *this; }
-protected:
 	ExecNoTextureItem() : ExecutableMenuItem(), colour({ 0, 0, 0, 0 }){}
+protected:
 	ExecNoTextureItem(SDL_Rect p, int id, SDL_Color colour_) : ExecutableMenuItem(id, p), colour(colour_){}
 	SDL_Color colour;
 };
@@ -114,6 +114,7 @@ public:
 	ToggleButton() : ExecNoTextureItem(), altColour({ 0, 0, 0, 0 }), toggle(false){}
 	ToggleButton(int id, SDL_Rect p, SDL_Color on_, SDL_Color off_) : ExecNoTextureItem(p, id, on_), altColour(off_), toggle(false){}
 
+	virtual void execute(){ toggle = !toggle; }
 	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i);
 
 	void setToggle(bool b){ toggle = b; }

@@ -10,15 +10,13 @@ void TitleState::init(){
 	setTextColour({ 30, 200, 30, 255 });
 
 	SDL_Rect mid = gfx->setRectToMiddle(350, 150);
-	TextureItem * titleMessage = new TextureItem();
-	titleMessage->setTexture("Arena Game!", getTextColour(), gfx).setPosition(mid);
+	titleMessage.setTexture("Arena Game!", getTextColour(), gfx).setPosition(mid);
 	mid = gfx->setRectToMiddle(200, 50);
 	mid.y += 100;
-	TextureItem * welcomeMessage = new TextureItem();
-	welcomeMessage->setTexture("Press any key..!", getTextColour(), gfx).setPosition(mid);
+	welcomeMessage.setTexture("Press any key..!", getTextColour(), gfx).setPosition(mid);
 	
-	addItem(titleMessage);
-	addItem(welcomeMessage);
+	addItem(&titleMessage);
+	addItem(&welcomeMessage);
 }
 
 void TitleState::handleEvent(){

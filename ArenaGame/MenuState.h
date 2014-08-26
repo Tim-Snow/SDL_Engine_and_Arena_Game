@@ -7,16 +7,17 @@
 class OptionsState : public MenuSystem{
 public:
 	void init();
+	void update(double);
 
 	OptionsState(){}
 private:
-	MenuButton		* acceptButton;
-	MenuButton		* backButton;
-	TextureItem		* title;
-	TextureItem		* fullscreen;
-	TextureItem		* res;
-	ToggleButton	* fullscreenTog;
-	SDL_Rect posRect;
+	MenuButton		acceptButton;
+	MenuButton		backButton;
+	TextureItem		title;
+	TextureItem		fullscreen;
+	TextureItem		res;
+	ToggleButton	fullscreenTog;
+	SDL_Rect		posRect;
 };
 
 class LibraryState : public MenuSystem{
@@ -25,9 +26,8 @@ public:
 
 	LibraryState(){}
 private:
-	TextureItem * title;
-	MenuButton * backButton;
-
+	TextureItem title;
+	MenuButton	backButton;
 };
 
 class MenuState : public MenuSystem{
@@ -36,14 +36,10 @@ public:
 	
 	MenuState(){}
 private:
-	MenuButton* playButton;
-	MenuButton* optionsButton;
-	MenuButton* libraryButton;
-	MenuButton* exitButton;
-
-	CharSelectState charSelect;
-	OptionsState optionsState;
-	LibraryState libraryState;
+	MenuButton playButton;
+	MenuButton optionsButton;
+	MenuButton libraryButton;
+	MenuButton exitButton;
 };
 
 

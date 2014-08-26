@@ -121,12 +121,14 @@ void GraphicsEngine::drawFullBG(SDL_Texture * t){
 
 SDL_Texture* GraphicsEngine::makeTextureFromSurf(SDL_Surface * s){
 	texture = SDL_CreateTextureFromSurface(renderer, s);
+	SDL_FreeSurface(s);
 	return texture;
 }
 
 SDL_Texture* GraphicsEngine::makeTextureFromSpritesheet(SDL_Surface * s, SDL_Rect srcPos){
 	SDL_SetClipRect(s, &srcPos);
 	texture = SDL_CreateTextureFromSurface(renderer, s);
+	SDL_FreeSurface(s);
 	return texture;
 }
 
@@ -201,6 +203,8 @@ void GraphicsEngine::setWindowSize(int w_, int h_){
 }
 
 GraphicsEngine::~GraphicsEngine(){
+	TTF_CloseFont(font);
+	SDL_DestroyTexture(texture);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 }

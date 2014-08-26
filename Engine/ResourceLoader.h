@@ -18,8 +18,9 @@ public:
 	std::string readTextFile(const char*);
 	SDL_Surface * loadBMP(const char*);
 	SDL_Surface * loadImage(const char*);
-	~ResourceLoader(){ IMG_Quit(); }
+	~ResourceLoader(){ SDL_FreeSurface(surf); IMG_Quit(); }
 private:
+	SDL_Surface * surf;
 	ResourceLoader(){ IMG_Init(IMG_INIT_PNG); }
 };
 #endif /* defined  (_RESOURCELOADER_H_) */

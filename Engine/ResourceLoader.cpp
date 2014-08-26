@@ -19,7 +19,7 @@ std::string ResourceLoader::readTextFile(const char* t) {
 	return content;
 }
 SDL_Surface * ResourceLoader::loadImage(const char* i){
-	SDL_Surface * surf = nullptr;
+	surf = nullptr;
 	surf = IMG_Load(i);
 	if (surf == nullptr){
 		std::cout << "Cannot access path for: " << i << std::endl;
@@ -29,7 +29,7 @@ SDL_Surface * ResourceLoader::loadImage(const char* i){
 
 
 SDL_Surface * ResourceLoader::loadBMP(const char* i){
-	SDL_Surface * surf = nullptr;
+	surf = nullptr;
 	surf = SDL_LoadBMP(i);
 	if (surf == nullptr){
 		std::cout << "Cannot access path for: " << i << std::endl;
