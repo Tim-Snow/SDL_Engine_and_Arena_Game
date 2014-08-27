@@ -16,16 +16,12 @@ public:
 
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
-	std::shared_ptr<ResourceLoader> res;
-	
-	SDL_Texture * getTexture(char* p);
 
+	void loadResources();
 	void handleEvent();
 	void draw();
 	void update(double);
-
-
-	
+		
 	Game();
 	~Game();
 private:

@@ -7,20 +7,26 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <memory>
+#include <map>
 
 class ResourceLoader{
 public:
-	static ResourceLoader& instance(){
-		static ResourceLoader *instance = new ResourceLoader();
-		return *instance;
-	}
+	static void addResource(const char* name, SDL_Texture* t);
+	static SDL_Texture * getResource(const char* name);
 
-	std::string readTextFile(const char*);
-	SDL_Surface * loadBMP(const char*);
-	SDL_Surface * loadImage(const char*);
-	~ResourceLoader(){ SDL_FreeSurface(surf); IMG_Quit(); }
+	static std::string readTextFile(const char*);
+	static SDL_Surface * loadBMP(const char*);
+	static SDL_Surface * loadImage(const char*);
+
+	~ResourceLoader(){ 
+		for (auto r : resources){
+			SDL_DestroyTexture(r.second);
+		}
+		IMG_Quit();
+	}
 private:
-	SDL_Surface * surf;
 	ResourceLoader(){ IMG_Init(IMG_INIT_PNG); }
+	static std::map<const char*, SDL_Texture*> resources;
 };
 #endif /* defined  (_RESOURCELOADER_H_) */

@@ -24,7 +24,7 @@ void exit(){
 }
 
 void MenuState::init(){
-	setBackgroundImage(gfx->makeTextureFromSurf(ResourceLoader::instance().loadImage("res/titleBackground.png")));
+	setBackgroundImage(ResourceLoader::getResource("menuBG"));
 	setTextColour({ 30, 200, 60, 255 });
 	setBorderColour({0, 100, 0, 55});
 	setSelBorderColour({ 60, 255, 100, 255 });
@@ -40,8 +40,7 @@ void MenuState::init(){
 	libraryButton.setID(2).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("LIBRARY", gfx).setFunc(goToLibrary);
 	posRect.x += 200;
 	exitButton.setID(3).setPosition(posRect).setBorderSize(10).setFontColour(getTextColour()).setTexture("EXIT", gfx).setFunc(exit);
-
-
+	
 	addButton(&playButton);
 	addButton(&optionsButton);
 	addButton(&libraryButton);
@@ -49,7 +48,7 @@ void MenuState::init(){
 }
 
 void OptionsState::init(){
-	setBackgroundImage(gfx->makeTextureFromSurf(ResourceLoader::instance().loadImage("res/titleBackground.png")));
+	setBackgroundImage(ResourceLoader::getResource("menuBG"));
 	setTextColour({ 30, 200, 60, 255 });
 	setBorderColour({ 0, 100, 0, 55 });
 	setSelBorderColour({ 60, 255, 100, 255 });
@@ -58,7 +57,7 @@ void OptionsState::init(){
 	posRect = { gfx->getWindowWidth() / 2 - 100, 10, 200, 75 };
 	title.setTexture("OPTIONS", getTextColour(), gfx).setPosition(posRect);
 	posRect = { 40, 95, 150, 50 };
-	fullscreen.setTexture("Fullscreen", getTextColour(),gfx).setPosition(posRect);
+	fullscreen.setTexture("Fullscreen", getTextColour(), gfx).setPosition(posRect);
 	posRect.y += 60;
 	res.setTexture("Resolution", getTextColour(), gfx).setPosition(posRect);
 
@@ -91,7 +90,7 @@ void OptionsState::update(double d){
 			
 			if (selectedButton == acceptButton.getID()){
 				gfx->setFullscreen(fullscreenTog.getToggle());
-				goBack();
+				goBack();	//pops twice (all the way back to title), cleaning all states along the way and reinitializing title state at correct resolution
 				StateManager::instance().getState()->clean();
 				StateManager::instance().getState()->init();
 			}
@@ -120,7 +119,7 @@ void OptionsState::update(double d){
 }
 
 void LibraryState::init(){
-	setBackgroundImage(gfx->makeTextureFromSurf(ResourceLoader::instance().loadImage("res/titleBackground.png")));
+	setBackgroundImage(ResourceLoader::getResource("menuBG"));
 	setTextColour({ 30, 200, 60, 255 });
 	setBorderColour({ 0, 100, 0, 55 });
 	setSelBorderColour({ 60, 255, 100, 255 });

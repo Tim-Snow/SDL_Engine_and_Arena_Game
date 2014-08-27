@@ -3,7 +3,6 @@
 
 enum MENU_COMMANDS { UP, DOWN, LEFT, RIGHT, ACCEPT, BACK, EXIT, NONE };
 
-
 #include "ResourceLoader.h"
 #include "GraphicsEngine.h"
 #include "InputManager.h"
@@ -14,11 +13,9 @@ public:
 
 	virtual void init() = 0;
 	virtual void clean() = 0;
-
 	virtual void handleEvent() = 0;
 	virtual void draw() = 0;
 	virtual void update(double d) = 0;
-
 protected:
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
@@ -34,7 +31,7 @@ public:
 	void setup(std::shared_ptr<GraphicsEngine> g, std::shared_ptr<InputManager> i){ gfx = g; input = i; }
 
 	State * getState()			{ return states.back(); }
-	void	pushState(State* s)	{ states.push_back(s); input->pollEvent(); states.back()->start(gfx, input); states.back()->handleEvent(); states.back()->init(); }
+	void	pushState(State* s)	{ states.push_back(s); states.back()->start(gfx, input); input->pollEvent(); states.back()->handleEvent(); states.back()->init(); }
 	void	popState()			{ states.back()->clean(); states.pop_back(); input->pollEvent();  states.back()->handleEvent(); }
 
 	void clean(){
@@ -45,7 +42,6 @@ public:
 	}
 private:
 	StateManager(){}
-
 	std::shared_ptr<GraphicsEngine> gfx;
 	std::shared_ptr<InputManager> input;
 	std::vector<State*> states;

@@ -6,7 +6,9 @@ void goToMenu(){
 }
 
 void TitleState::init(){
-	setBackgroundImage(gfx->makeTextureFromSurf(ResourceLoader::instance().loadImage("res/titleBackground.png")));
+	setBackgroundImage(ResourceLoader::getResource("menuBG"));
+	//background = 
+	//setBackgroundImage();
 	setTextColour({ 30, 200, 30, 255 });
 
 	SDL_Rect mid = gfx->setRectToMiddle(350, 150);
@@ -19,13 +21,14 @@ void TitleState::init(){
 	addItem(&welcomeMessage);
 }
 
+
 void TitleState::handleEvent(){
 	menuInput = NONE;
 
 	if (input->isAnyKeyPressed())
 		menuInput = ACCEPT;
 
-	if (input->isPressed(SDLK_ESCAPE))
+	if (input->isPressed(SDLK_ESCAPE) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_B))
 		menuInput = EXIT;
 }
 

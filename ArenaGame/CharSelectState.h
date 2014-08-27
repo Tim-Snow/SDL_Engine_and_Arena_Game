@@ -8,11 +8,9 @@ class CharSelectState : public MenuSystem{
 public:
 	void init();
 	void update(double d);
-	void draw();
-	CharSelectState();
-	SDL_Texture * t;
 
+	CharSelectState();
 private:
-	PlayState play;
+	TextureItem title;
 };
 #endif /* defined (_CHARSELECTSTATE_H_)*/
