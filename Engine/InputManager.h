@@ -5,6 +5,8 @@
 #include <iostream>
 #include "../SDL2.0\include\SDL.h"
 
+enum JoystickDirections{ J_UP, J_DOWN, J_LEFT, J_RIGHT, J_NONE };
+
 struct Controller{
 	SDL_GameController* controller;
 	std::map<SDL_GameControllerButton, bool> buttons;
@@ -32,27 +34,35 @@ public:
 		static std::shared_ptr<InputManager> instance = std::shared_ptr<InputManager>(new InputManager());
 		return instance;
 	}
+	void	pollEvent();
+	void	setDeadzone(int i)	{ deadZone	= i;	 }
+	void	quit()				{ run		= false; }
+	int		getDeadzone()		{ return deadZone;	 }
+	bool	checkQuit()			{ return run;		 }
+	bool isHeld(SDL_Keycode k)	{ return keysH[k];	 }
 
-	void pollEvent();
+	JoystickDirections isLeftJoystickMoved(int);
+	JoystickDirections isAnyLeftJoystickMoved();
+
+	bool isControllerPressed(int, SDL_GameControllerButton);
+	bool isControllerPressed(SDL_GameControllerButton);
+	bool isControllerHeld(int, SDL_GameControllerButton);
 	bool isPressed(SDL_Keycode);
-	bool isControllerPressed(int id, SDL_GameControllerButton but);
-	bool isControllerPressed(SDL_GameControllerButton but);
-	bool isControllerHeld(int id, SDL_GameControllerButton but);
-	bool isHeld(SDL_Keycode);
 	bool isAnyKeyPressed();
-	bool checkQuit();
-	void quit(){ run = false; }
 
 	~InputManager();
 private:
 	InputManager();
 
-	SDL_GameController * gCont;
-	SDL_Event event;
-	std::map<int, bool> keysP;
-	std::map<int, bool> keysH;
+	SDL_GameController *		gCont;
+	SDL_Event					event;
+	std::map<int, bool>			keysP;
+	std::map<int, bool>			keysH;
+	std::map<int, Controller>	controllers;
 
-	std::map<int, Controller> controllers;
+	int menuWait;
+	int deadZone;
+	int controllerIndex;
 	bool run;
 	bool anyKey;
 };

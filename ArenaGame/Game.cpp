@@ -31,14 +31,13 @@ void Game::update(double d){
 
 void Game::draw(){
 		gfx->clearDisplay();
-
 		StateManager::instance().getState()->draw();
 		gfx->updateDisplay();
 }
 
-
 Game::~Game(){
 	StateManager::instance().clean();
+	ResourceLoader::clean();
 	SDL_DestroyTexture(texture);
 	core.exit();
 }

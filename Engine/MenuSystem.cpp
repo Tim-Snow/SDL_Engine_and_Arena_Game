@@ -6,22 +6,22 @@ void MenuSystem::init(){ }
 void MenuSystem::handleEvent(){
 	menuInput = NONE;
 
-	if (input->isPressed(SDLK_SPACE) || input->isPressed(SDLK_RETURN) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_A) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_START))
-		menuInput = ACCEPT;
-
-	if (input->isPressed(SDLK_ESCAPE) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_B) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_BACK))
+	if (input->isPressed(SDLK_ESCAPE)	|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_B) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_BACK))
 		menuInput = BACK;
 
-	if (input->isPressed(SDLK_UP) || input->isPressed(SDLK_w) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_UP))
+	if (input->isPressed(SDLK_SPACE)	|| input->isPressed(SDLK_RETURN)	|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_A)			|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_START))
+		menuInput = ACCEPT;
+
+	if (input->isPressed(SDLK_UP)		|| input->isPressed(SDLK_w)			|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_UP)	|| (input->isAnyLeftJoystickMoved() == J_UP))
 		menuInput = UP;
 
-	if (input->isPressed(SDLK_LEFT) || input->isPressed(SDLK_a) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT))
+	if (input->isPressed(SDLK_LEFT)		|| input->isPressed(SDLK_a)			|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_LEFT)	|| (input->isAnyLeftJoystickMoved() == J_LEFT))
 		menuInput = LEFT;
 
-	if (input->isPressed(SDLK_RIGHT) || input->isPressed(SDLK_d) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT))
+	if (input->isPressed(SDLK_RIGHT)	|| input->isPressed(SDLK_d)			|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (input->isAnyLeftJoystickMoved() == J_RIGHT))
 		menuInput = RIGHT;
 
-	if (input->isPressed(SDLK_DOWN) || input->isPressed(SDLK_s) || input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN))
+	if (input->isPressed(SDLK_DOWN)		|| input->isPressed(SDLK_s)			|| input->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN)	|| (input->isAnyLeftJoystickMoved() == J_DOWN))
 		menuInput = DOWN;
 }
 
@@ -80,8 +80,6 @@ void MenuSystem::addItem(MenuItem* i){
 }
 
 void MenuSystem::clean(){
-	//SDL_DestroyTexture(background);
-
 	while (!items.empty()){
 		items.back()->clean();
 		items.pop_back();

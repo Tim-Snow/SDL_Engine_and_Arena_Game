@@ -12,9 +12,9 @@ public:
 
 	TitleState(){}
 private:
-	MENU_COMMANDS titleInput;
-	TextureItem titleMessage;
-	TextureItem welcomeMessage;
+	MENU_COMMANDS	titleInput;
+	TextureItem		titleMessage;
+	TextureItem		welcomeMessage;
 };
 
 #endif /* defined (_TITLESTATE_H_)*/

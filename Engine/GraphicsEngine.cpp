@@ -61,24 +61,24 @@ void GraphicsEngine::setTitle(std::string n){
 }
 
 bool GraphicsEngine::makeWindow(int width, int height, bool fullscreen_){
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) { return false; }
-
-	if (TTF_Init() != 0){ return false; }
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)	{ return false; }
+	if (TTF_Init() != 0)					{ return false; }
 
 	getPossibleResolutions();
-	fullscreen = fullscreen_;
-	windowedWidth = width; windowedHeight = height;
+	fullscreen = fullscreen_; windowedWidth = width; windowedHeight = height;
+
 	if (fullscreen){
 		flags = SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_SHOWN;
-		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, currentDisplay.w, currentDisplay.h, flags);
+		window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, currentDisplay.w, currentDisplay.h, flags);
 	} else {
 		flags = SDL_WINDOW_SHOWN;
-		window = SDL_CreateWindow(name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowedWidth, windowedHeight, flags);
+		window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowedWidth, windowedHeight, flags);
 	}
 
 	if (window == nullptr) { return false; }
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
 	if (renderer == nullptr) { return false; }
 	return true;
 }

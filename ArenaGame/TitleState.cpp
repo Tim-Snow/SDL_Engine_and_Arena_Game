@@ -7,8 +7,6 @@ void goToMenu(){
 
 void TitleState::init(){
 	setBackgroundImage(ResourceLoader::getResource("menuBG"));
-	//background = 
-	//setBackgroundImage();
 	setTextColour({ 30, 200, 30, 255 });
 
 	SDL_Rect mid = gfx->setRectToMiddle(350, 150);

@@ -12,14 +12,14 @@
 
 class ResourceLoader{
 public:
-	static void addResource(const char* name, SDL_Texture* t);
-	static SDL_Texture * getResource(const char* name);
+	static void				addResource(const char* name, SDL_Texture* t);
+	static SDL_Texture *	getResource(const char* name);
 
-	static std::string readTextFile(const char*);
-	static SDL_Surface * loadBMP(const char*);
-	static SDL_Surface * loadImage(const char*);
+	static std::string		readTextFile(const char*);
+	static SDL_Surface *	loadBMP(const char*);
+	static SDL_Surface *	loadImage(const char*);
 
-	~ResourceLoader(){ 
+	static void clean(){ 
 		for (auto r : resources){
 			SDL_DestroyTexture(r.second);
 		}
