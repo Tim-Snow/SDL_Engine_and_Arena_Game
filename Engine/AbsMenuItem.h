@@ -34,7 +34,7 @@ public:
 	TextureItem(SDL_Rect position_, SDL_Texture * texture_ = nullptr) : texture(texture_){}
 	
 	virtual void draw(std::shared_ptr<GraphicsEngine> g);
-	virtual void clean() { SDL_DestroyTexture(texture); }
+	virtual void clean() {}
 
 	virtual TextureItem &setTexture(const char *, SDL_Color c, std::shared_ptr<GraphicsEngine>);
 	virtual TextureItem &setTexture(SDL_Texture * t)	 { texture = t; return *this; }
@@ -56,20 +56,18 @@ public:
 	virtual ExecutableMenuItem &setPosition(SDL_Rect p)		{ position = p; return *this; }
 	virtual ExecutableMenuItem &setBorderCol(SDL_Color c)	{ borderColour = c; return *this; }
 	virtual ExecutableMenuItem &setSelBorderCol(SDL_Color c){ selBorderColour = c; return *this; }
-	virtual ExecutableMenuItem &setBackgroundColour(SDL_Color c)	{ return *this; }
-	virtual ExecutableMenuItem &setTexture(SDL_Texture * t)			{ return *this; }
-	virtual ExecutableMenuItem &setTexture(const char *, std::shared_ptr<GraphicsEngine> g)	{ return *this; }
-	virtual ExecutableMenuItem &setFontColour(SDL_Color)			{ return *this; }
+	virtual ExecutableMenuItem &setBackgroundColour(SDL_Color c)	{ bgColour = c;  return *this; }
 protected:
 	int itemID;
 	void(*func)(void);
 	SDL_Rect position;
 	SDL_Rect border;
+	SDL_Color bgColour;
 	SDL_Color borderColour;
 	SDL_Color selBorderColour;
 	ExecutableMenuItem(int id, SDL_Rect p, SDL_Color b, SDL_Color bs) : position(p), border(position), itemID(id), borderColour(b), selBorderColour(bs){}
 	ExecutableMenuItem(int id, SDL_Rect p);
-	ExecutableMenuItem() : itemID(0), position({ 0, 0, 0, 0 }), border(position), borderColour({ 0, 0, 0, 0 }), selBorderColour({ 0, 0, 0, 0 }){}
+	ExecutableMenuItem() : itemID(0), position({ 0, 0, 0, 0 }), border(position), borderColour({ 0, 0, 0, 0 }), selBorderColour({ 0, 0, 0, 0 }), bgColour({0,0,0,0}){}
 };
 
 class ExecNoTextureItem : public ExecutableMenuItem{
@@ -77,28 +75,35 @@ public:
 	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i){}
 	virtual void clean() {}
 
-	virtual ExecutableMenuItem &setBackgroundColour(SDL_Color c){ colour = c; return *this; }
-	ExecNoTextureItem() : ExecutableMenuItem(), colour({ 0, 0, 0, 0 }){}
+	ExecNoTextureItem() : ExecutableMenuItem(){}
 protected:
-	ExecNoTextureItem(SDL_Rect p, int id, SDL_Color colour_) : ExecutableMenuItem(id, p), colour(colour_){}
-	SDL_Color colour;
+	ExecNoTextureItem(SDL_Rect p, int id) : ExecutableMenuItem(id, p){}
 };
 
 class ExecTextureItem : public ExecutableMenuItem{
 public:
 	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i){}
-	virtual void clean() { SDL_DestroyTexture(texture); }
+	virtual void clean() {}
 
+	virtual ExecTextureItem &setPosition(SDL_Rect p){
+		position = p;
+		textPosition = position;
+		textPosition.h -= 10;
+		textPosition.w -= 10;
+		textPosition.x += 5;
+		textPosition.y += 5;
+	return *this; }
 	virtual ExecTextureItem &setTexture(const char *, std::shared_ptr<GraphicsEngine> g);
 	virtual ExecTextureItem &setTexture(SDL_Texture * t)	 { texture = t; return *this; }
 	virtual ExecTextureItem &setFontColour(SDL_Color c)		 { fontColour = c; return *this; }
 	virtual ExecTextureItem &setBackgroundColour(SDL_Color c){ background = c; return *this; }
-
+	
 	ExecTextureItem() : ExecutableMenuItem(), texture(nullptr), background({0,0,0,0}){}
 protected:
 	ExecTextureItem(SDL_Rect p, int id, SDL_Texture * texture_) : ExecutableMenuItem(id, p), texture(texture_), background({ 0, 0, 0, 0 }){}
 	ExecTextureItem(SDL_Rect p, int id, const char * text, SDL_Color fontColour_, std::shared_ptr<GraphicsEngine> g);
 	SDL_Texture * texture;
+	SDL_Rect textPosition;
 	SDL_Color fontColour;
 	SDL_Color background;
 };
@@ -112,15 +117,19 @@ public:
 class ToggleButton : public ExecNoTextureItem{
 public:
 	ToggleButton() : ExecNoTextureItem(), altColour({ 0, 0, 0, 0 }), toggle(false){}
-	ToggleButton(int id, SDL_Rect p, SDL_Color on_, SDL_Color off_) : ExecNoTextureItem(p, id, on_), altColour(off_), toggle(false){}
+	ToggleButton(int id, SDL_Rect p, SDL_Color on_, SDL_Color off_) : ExecNoTextureItem(p, id), altColour(off_), toggle(false){}
 
 	virtual void execute(){ toggle = !toggle; }
 	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i);
+
+	virtual ToggleButton &setOnColour(SDL_Color c){ onColour = c; return *this; }
+	virtual ToggleButton &setAltColour(SDL_Color c){ altColour = c; return *this; }
 
 	void setToggle(bool b){ toggle = b; }
 	bool getToggle(){ return toggle; }
 private:
 	bool toggle;
+	SDL_Color onColour;
 	SDL_Color altColour;
 };
 #endif /* defined (_ABSMENUITEM_H_)*/

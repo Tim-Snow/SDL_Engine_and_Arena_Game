@@ -49,7 +49,7 @@ void ToggleButton::draw(std::shared_ptr<GraphicsEngine> g, int i){
 	if (i == itemID){ g->drawRect(border, selBorderColour); }
 	else { g->drawRect(border, borderColour); }
 
-	if (toggle){ g->drawRect(position, colour); }
+	if (toggle){ g->drawRect(position, onColour); }
 	if(!toggle){ g->drawRect(position, altColour); }
 }
 
@@ -58,7 +58,8 @@ void MenuButton::draw(std::shared_ptr<GraphicsEngine> g, int i){
 	else { g->drawRect(border, borderColour); }
 
 	g->drawRect(position, background);
-	g->draw(texture, position);
+
+	g->draw(texture, textPosition);
 }
 
 void NoTextureItem::draw(std::shared_ptr<GraphicsEngine> g){

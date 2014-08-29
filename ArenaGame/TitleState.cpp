@@ -6,19 +6,16 @@ void goToMenu(){
 }
 
 void TitleState::init(){
-	setBackgroundImage(ResourceLoader::getResource("menuBG"));
-	setTextColour({ 30, 200, 30, 255 });
+	setBackgroundImage(ResourceLoader::getResource("titleBG"));
 
-	SDL_Rect mid = gfx->setRectToMiddle(350, 150);
-	titleMessage.setTexture("Arena Game!", getTextColour(), gfx).setPosition(mid);
-	mid = gfx->setRectToMiddle(200, 50);
-	mid.y += 100;
-	welcomeMessage.setTexture("Press any key..!", getTextColour(), gfx).setPosition(mid);
+	SDL_Rect mid = gfx->setRectToMiddle(400, 130); mid.y -= 50;
+	titleMessage.setTexture(ResourceLoader::getResource("titleText")).setPosition(mid);
+	mid = gfx->setRectToMiddle(350, 60);	mid.y += 50;
+	welcomeMessage.setTexture(ResourceLoader::getResource("anykeyText")).setPosition(mid);
 	
 	addItem(&titleMessage);
 	addItem(&welcomeMessage);
 }
-
 
 void TitleState::handleEvent(){
 	menuInput = NONE;

@@ -1,6 +1,6 @@
 #include "InputManager.h"
 
-InputManager::InputManager() : run(true), anyKey(false), controllerIndex(0){
+InputManager::InputManager() : run(true), anyKey(false), controllerIndex(0), alreadyPressed(false){
 	menuWait = 0;
 	deadZone = 10000;
 	SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
@@ -62,6 +62,36 @@ void InputManager::pollEvent(){
 			break;
 		}
 	}
+}
+
+JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
+	JoystickDirections j = J_NONE;
+	if (menuWait == 0){
+		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
+			j = J_RIGHT;
+			menuWait++;
+		}
+		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) < -deadZone)){
+			j = J_LEFT;
+			menuWait++;
+		}
+		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) > deadZone)){
+			j = J_DOWN;
+			menuWait++;
+		}
+		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) < -deadZone)){
+			j = J_UP;
+			menuWait++;
+		}
+	}
+	if (menuWait != 0){
+		menuWait++;
+		if (menuWait >= 25){
+			menuWait = 0;
+		}
+	}
+
+	return j;
 }
 
 JoystickDirections InputManager::isLeftJoystickMoved(int i){
@@ -134,6 +164,17 @@ bool InputManager::isControllerPressed(int id, SDL_GameControllerButton but){
 	if(controllers[id].getButton(but)){
 		controllers[id].setButton(but, false);
 		return true;
+	}
+	return false;
+}
+
+bool InputManager::isControllerPressed(SDL_GameController* id, SDL_GameControllerButton but){
+	if (SDL_GameControllerGetButton(id, but) == 1 && (alreadyPressed == false)){
+		alreadyPressed = true;
+		return true;
+	}
+	if (SDL_GameControllerGetButton(id, but) == 0){
+		alreadyPressed = false;
 	}
 	return false;
 }

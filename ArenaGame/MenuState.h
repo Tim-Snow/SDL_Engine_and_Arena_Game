@@ -13,6 +13,7 @@ public:
 private:
 	MenuButton		acceptButton;
 	MenuButton		backButton;
+	TextureItem		menuBG;
 	TextureItem		title;
 	TextureItem		fullscreen;
 	TextureItem		res;
@@ -33,6 +34,7 @@ private:
 class MenuState : public MenuSystem{
 public:
 	void init();
+	void update(double);
 	
 	MenuState(){}
 private:
