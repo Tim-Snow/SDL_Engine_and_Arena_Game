@@ -18,6 +18,18 @@ void Game::loadResources(){
 	surf = ResourceLoader::loadImage("res/menuBackground.png");
 	ResourceLoader::addResource("menuBG", gfx->makeTextureFromSurf(surf));
 
+	surf = ResourceLoader::loadImage("res/spritesheet.png");
+	ResourceLoader::addResource("sun", gfx->makeTextureFromSurf(surf));
+
+	surf = ResourceLoader::loadImage("res/level.png");
+	ResourceLoader::addResource("levelBG", gfx->makeTextureFromSurf(surf));
+
+	surf = ResourceLoader::loadImage("res/daysky.png");
+	ResourceLoader::addResource("dayBG", gfx->makeTextureFromSurf(surf));
+
+	surf = ResourceLoader::loadImage("res/nightsky.png");
+	ResourceLoader::addResource("nightBG", gfx->makeTextureFromSurf(surf));
+
 	ResourceLoader::addResource("anykeyText",		gfx->getTextTexture("Press any key to continue..!", gfx->getFont(), fontColour));
 	ResourceLoader::addResource("titleText",		gfx->getTextTexture("Arena Game",					gfx->getFont(), fontColour));
 	ResourceLoader::addResource("playText",			gfx->getTextTexture("Play",							gfx->getFont(), fontColour));
@@ -25,9 +37,10 @@ void Game::loadResources(){
 	ResourceLoader::addResource("optionsText",		gfx->getTextTexture("Options",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("exitText",			gfx->getTextTexture("Exit",							gfx->getFont(), fontColour));
 	ResourceLoader::addResource("charSelText",		gfx->getTextTexture("Character Select",				gfx->getFont(), fontColour));
+	ResourceLoader::addResource("pressStartText",	gfx->getTextTexture("Press Start to play!",			gfx->getFont(), fontColour));
 	ResourceLoader::addResource("pressButtonText",	gfx->getTextTexture("Press A to join!",				gfx->getFont(), fontColour));
 	ResourceLoader::addResource("readyText",		gfx->getTextTexture("Ready!",						gfx->getFont(), fontColour));
-	ResourceLoader::addResource("noConnectText",	gfx->getTextTexture("No controller detected",		gfx->getFont(), fontColour));
+	ResourceLoader::addResource("noConnectText",	gfx->getTextTexture("Controller not found",			gfx->getFont(), fontColour));
 	ResourceLoader::addResource("talentText",		gfx->getTextTexture("Talents",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("readyText",		gfx->getTextTexture("Ready",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("saveText",			gfx->getTextTexture("Save",							gfx->getFont(), fontColour));
@@ -40,7 +53,6 @@ void Game::loadResources(){
 	//char select player quadrant border
 	//characters and items from spritesheet
 	//level sprite sheet
-
 	SDL_FreeSurface(surf);
 }
 
