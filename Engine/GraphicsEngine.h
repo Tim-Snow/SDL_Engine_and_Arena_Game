@@ -32,6 +32,7 @@ public:
 	void drawRect(int x, int y, int w, int h, int r, int g, int b);
 	void drawRect(SDL_Rect rect, int r, int g, int b);
 	void drawRect(SDL_Rect rect, SDL_Color c);
+	void drawLine(int x1, int y1, int x2, int y2, int length);
 
 	GraphicsEngine();
 	~GraphicsEngine();
@@ -45,6 +46,7 @@ private:
 	SDL_Renderer*	renderer;
 	TTF_Font	*	font;
 	SDL_Texture *	texture;
+	SDL_Surface *	surf;
 	const char	*	name;
 	bool			fullscreen;
 };

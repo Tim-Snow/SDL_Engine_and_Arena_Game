@@ -121,19 +121,13 @@ void GraphicsEngine::drawFullBG(SDL_Texture * t){
 
 SDL_Texture* GraphicsEngine::makeTextureFromSurf(SDL_Surface * s){
 	texture = SDL_CreateTextureFromSurface(renderer, s);
-	return texture;
-}
-
-SDL_Texture* GraphicsEngine::makeTextureFromSpritesheet(SDL_Surface * s, SDL_Rect srcPos){
-	SDL_SetClipRect(s, &srcPos);
-	texture = SDL_CreateTextureFromSurface(renderer, s);
+	SDL_FreeSurface(s);
 	return texture;
 }
 
 SDL_Texture * GraphicsEngine::getTextTexture(const char* p, TTF_Font* f, SDL_Color c){
-	SDL_Surface * surf = TTF_RenderText_Blended(f, p, c);
+	surf = TTF_RenderText_Blended(f, p, c);
 	texture = makeTextureFromSurf(surf);
-	SDL_FreeSurface(surf);
 	return texture;
 }
 
@@ -157,6 +151,11 @@ void GraphicsEngine::clearDisplay(){
 
 void GraphicsEngine::updateDisplay(){
 	SDL_RenderPresent(renderer);
+}
+
+void GraphicsEngine::drawLine(int x1, int y1, int x2, int y2, int length){
+	float a = atan2(y2 - y1, x2 - x1);
+	SDL_RenderDrawLine(renderer, x1, y1, x1 + cos(a)*length, y1 + sin(a)*length);
 }
 
 void GraphicsEngine::drawSquare(int x, int y, int w, int r, int g, int b){
@@ -202,6 +201,7 @@ void GraphicsEngine::setWindowSize(int w_, int h_){
 
 GraphicsEngine::~GraphicsEngine(){
 	TTF_CloseFont(font);
+	SDL_FreeSurface(surf);
 	SDL_DestroyTexture(texture);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);

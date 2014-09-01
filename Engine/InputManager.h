@@ -18,7 +18,9 @@ struct Controller{
 		controller = c;
 	}
 	SDL_GameController* getController(){
-		return controller;
+		if (controller != nullptr){
+			return controller;
+		}
 	}
 	Controller(SDL_GameController* gc){
 		controller = gc;
@@ -42,10 +44,14 @@ public:
 	void	quit()				{ run		= false; }
 	int		getDeadzone()		{ return deadZone;	 }
 	bool	checkQuit()			{ return run;		 }
-	bool isHeld(SDL_Keycode k)	{ return keysH[k]; }
+	bool isHeld(SDL_Keycode k)	{ return keysH[k];	 }
 
-	SDL_GameController* getController(int id){ return controllers[id].getController(); }
-
+	SDL_GameController* getController(int id){
+		if (id < controllers.size()){
+			return controllers[id].getController();
+		}
+		else return nullptr;
+	}
 	JoystickDirections isLeftJoystickMoved(SDL_GameController*);
 	JoystickDirections isLeftJoystickMoved(int);
 	JoystickDirections isAnyLeftJoystickMoved();
@@ -56,7 +62,7 @@ public:
 	bool isControllerHeld(int, SDL_GameControllerButton);
 	bool isPressed(SDL_Keycode);
 	bool isAnyKeyPressed();
-
+	
 	~InputManager();
 private:
 	InputManager();

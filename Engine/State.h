@@ -31,7 +31,7 @@ public:
 	void setup(std::shared_ptr<GraphicsEngine> g, std::shared_ptr<InputManager> i){ gfx = g; input = i; }
 
 	State * getState()			{ return states.back(); }
-	void	pushState(State* s)	{ states.push_back(s); states.back()->start(gfx, input); input->pollEvent(); states.back()->handleEvent(); states.back()->init(); }
+	void	pushState(State* s)	{ states.push_back(s); states.back()->start(gfx, input); states.back()->init(); input->pollEvent();  states.back()->handleEvent(); }
 	void	popState()			{ states.back()->clean(); states.pop_back(); input->pollEvent();  states.back()->handleEvent(); }
 
 	void clean(){
@@ -43,8 +43,8 @@ public:
 private:
 	StateManager(){}
 	std::shared_ptr<GraphicsEngine> gfx;
-	std::shared_ptr<InputManager> input;
-	std::vector<State*> states;
+	std::shared_ptr<InputManager>	input;
+	std::vector<State*>				states;
 };
 
 #endif /* defined (_STATE_H_)*/
