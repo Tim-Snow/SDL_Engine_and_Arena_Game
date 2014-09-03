@@ -5,8 +5,7 @@ void PlayState::init(){
 	r = 350;
 	cx = gfx->getWindowWidth() / 2;
 	cy = gfx->getWindowHeight() / 2;
-	sun = ResourceLoader::getResource("sun");
-	block = ResourceLoader::getResource("sun");
+	sun = block = ResourceLoader::getResource("spritesheet");
 	bg = ResourceLoader::getResource("dayBG");
 	light = { 0, 0, 4, 4 };
 	node a, b, c, d, e, f, g, h;

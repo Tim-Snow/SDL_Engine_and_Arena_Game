@@ -18,8 +18,8 @@ void Game::loadResources(){
 	surf = ResourceLoader::loadImage("res/menuBackground.png");
 	ResourceLoader::addResource("menuBG", gfx->makeTextureFromSurf(surf));
 
-	surf = ResourceLoader::loadImage("res/spritesheet.png");
-	ResourceLoader::addResource("sun", gfx->makeTextureFromSurf(surf));
+	surf = ResourceLoader::loadImage("res/spritesheet2.png");
+	ResourceLoader::addResource("spritesheet2", gfx->makeTextureFromSurf(surf));
 
 	surf = ResourceLoader::loadImage("res/level.png");
 	ResourceLoader::addResource("levelBG", gfx->makeTextureFromSurf(surf));
@@ -42,6 +42,7 @@ void Game::loadResources(){
 	ResourceLoader::addResource("readyText",		gfx->getTextTexture("Ready!",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("noConnectText",	gfx->getTextTexture("Controller not found",			gfx->getFont(), fontColour));
 	ResourceLoader::addResource("talentText",		gfx->getTextTexture("Talents",						gfx->getFont(), fontColour));
+	ResourceLoader::addResource("classText",		gfx->getTextTexture("Class",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("readyText",		gfx->getTextTexture("Ready",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("saveText",			gfx->getTextTexture("Save",							gfx->getFont(), fontColour));
 	ResourceLoader::addResource("loadText",			gfx->getTextTexture("Load",							gfx->getFont(), fontColour));

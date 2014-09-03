@@ -8,29 +8,14 @@
 enum JoystickDirections{ J_UP, J_DOWN, J_LEFT, J_RIGHT, J_NONE };
 
 struct Controller{
-	SDL_GameController* controller;
+	bool inUse;
+	int  id;
+	int  controllerMenuWait;
+	
+	SDL_GameController	*	controller;
 	std::map<SDL_GameControllerButton, bool> buttons;
 
-	Controller(){
-		controller = nullptr;
-	}
-	void setController(SDL_GameController* c){
-		controller = c;
-	}
-	SDL_GameController* getController(){
-		if (controller != nullptr){
-			return controller;
-		}
-	}
-	Controller(SDL_GameController* gc){
-		controller = gc;
-	}
-	void setButton(SDL_GameControllerButton but, bool b){
-		buttons[but] = b;
-	}
-	bool getButton(SDL_GameControllerButton but){
-		return buttons[but];
-	}
+	Controller() : controllerMenuWait(0), inUse(false), controller(nullptr){}
 };
 
 class InputManager{
@@ -39,6 +24,7 @@ public:
 		static std::shared_ptr<InputManager> instance = std::shared_ptr<InputManager>(new InputManager());
 		return instance;
 	}
+
 	void	pollEvent();
 	void	setDeadzone(int i)	{ deadZone	= i;	 }
 	void	quit()				{ run		= false; }
@@ -46,12 +32,17 @@ public:
 	bool	checkQuit()			{ return run;		 }
 	bool isHeld(SDL_Keycode k)	{ return keysH[k];	 }
 
-	SDL_GameController* getController(int id){
-		if (id < controllers.size()){
-			return controllers[id].getController();
-		}
-		else return nullptr;
+	int numControllers(){
+		int j = 0;
+		for (int i = 0; i < controllers.size(); ++i){
+			if (controllers[i].inUse == true){
+				j++;
+		}	}
+		return j; 
 	}
+
+	Controller getController(int i){ return controllers[i]; }
+
 	JoystickDirections isLeftJoystickMoved(SDL_GameController*);
 	JoystickDirections isLeftJoystickMoved(int);
 	JoystickDirections isAnyLeftJoystickMoved();
@@ -66,7 +57,8 @@ public:
 	~InputManager();
 private:
 	InputManager();
-
+	void addGameController(int id);
+	void removeGameController(int id);
 	SDL_GameController *		gCont;
 	SDL_Event					event;
 	std::map<int, bool>			keysP;

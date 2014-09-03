@@ -1,17 +1,33 @@
 #include "InputManager.h"
 
-InputManager::InputManager() : run(true), anyKey(false), controllerIndex(0), alreadyPressed(false){
-	menuWait = 0;
-	deadZone = 10000;
+InputManager::InputManager() : run(true), anyKey(false), alreadyPressed(false), menuWait(0), deadZone(10000){
 	SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
 
-	if (SDL_NumJoysticks() > 0) {
-		for (controllerIndex = 0; controllerIndex < SDL_NumJoysticks(); controllerIndex++){
-			gCont = SDL_GameControllerOpen(controllerIndex);
+	for (controllerIndex = 0; controllerIndex < SDL_NumJoysticks(); controllerIndex++){
+		addGameController(controllerIndex);
+	}
+}
+
+void InputManager::addGameController(int id){
+	for (int i = 0; i < controllers.size()+1; i++){	//scans through controller map size + 1, meaning if all slots are in use, it will create one
+		if (controllers[i].inUse != true){	//finds first available slot to assign controller
+			gCont = SDL_GameControllerOpen(id);
 			if (gCont != nullptr){
-				controllers[controllerIndex].setController(gCont);
-				std::cout << "Controller detected: " << controllerIndex << std::endl;
-			}
+				SDL_Joystick* joystick		= SDL_GameControllerGetJoystick(gCont);	//joystick used simply for id to talk with event.cdevice.which
+				controllers[i].id			= SDL_JoystickInstanceID(joystick);
+				controllers[i].inUse		= true;
+				controllers[i].controller	= gCont;
+				std::cout << "Controller detected: " << i << std::endl;
+				break;	//if it has gotten this far, the controller has been added for the correct id, so stop the loop
+	}	}	}	}
+
+void InputManager::removeGameController(int id){
+	for (int i = 0; i < controllers.size(); i++){
+		if (controllers[i].id == id && controllers[i].inUse == true){
+			gCont = controllers[i].controller;
+			SDL_GameControllerClose(gCont);
+			controllers[i].inUse = false;
+			std::cout << "Controller removed: " << i << std::endl;
 		}
 	}
 }
@@ -22,14 +38,20 @@ void InputManager::pollEvent(){
 		case SDL_QUIT:
 			run = false;
 			break;
+		case SDL_CONTROLLERDEVICEADDED:
+			addGameController(event.cdevice.which);		
+			break;
+		case SDL_CONTROLLERDEVICEREMOVED:
+			removeGameController(event.cdevice.which);
+			break;
 		case SDL_KEYDOWN:
 			if (event.key.repeat == 0){
 				anyKey = true;
 				keysP[event.key.keysym.sym] = true;
+				keysH[event.key.keysym.sym] = true;
 				break;
 			}	else  {
 				anyKey = false;
-				keysH[event.key.keysym.sym] = true;
 				keysP[event.key.keysym.sym] = false;
 				break;
 			}
@@ -39,24 +61,20 @@ void InputManager::pollEvent(){
 			keysH[event.key.keysym.sym] = false;
 			break;
 		case SDL_CONTROLLERBUTTONDOWN:
-			controllers[event.cdevice.which].setButton((SDL_GameControllerButton)event.cbutton.button, true);
+			for (int i = 0; i < controllers.size(); ++i){
+				if (controllers[i].id == event.cdevice.which){
+					controllers[i].buttons[(SDL_GameControllerButton)event.cbutton.button] = true;
+				}
+			}
 			anyKey = true;
 			break;
 		case SDL_CONTROLLERBUTTONUP:
-			controllers[event.cdevice.which].setButton((SDL_GameControllerButton)event.cbutton.button, false);
-			anyKey = false;
-			break;
-		case SDL_CONTROLLERDEVICEADDED:
-			gCont = SDL_GameControllerOpen(controllerIndex);
-			if (gCont != nullptr){
-				controllers[controllerIndex].setController(gCont);
-				std::cout << "Controller detected: " << controllerIndex << std::endl;
-				controllerIndex++;
+			for (int i = 0; i < controllers.size(); ++i){
+				if (controllers[i].id == event.cdevice.which){
+					controllers[i].buttons[(SDL_GameControllerButton)event.cbutton.button] = false;
+				}
 			}
-			break;
-		case SDL_CONTROLLERDEVICEREMOVED:
-			SDL_GameControllerClose(controllers[event.cdevice.which].controller);
-			std::cout << "Controller removed: " << event.cdevice.which << std::endl;
+			anyKey = false;
 			break;
 		default:
 			break;
@@ -66,58 +84,62 @@ void InputManager::pollEvent(){
 
 JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
 	JoystickDirections j = J_NONE;
-	if (menuWait == 0){
-		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
-			j = J_RIGHT;
-			menuWait++;
-		}
-		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) < -deadZone)){
-			j = J_LEFT;
-			menuWait++;
-		}
-		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) > deadZone)){
-			j = J_DOWN;
-			menuWait++;
-		}
-		if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) < -deadZone)){
-			j = J_UP;
-			menuWait++;
+	SDL_Joystick* joystick = SDL_GameControllerGetJoystick(c);
+	for (int i = 0; i<numControllers(); ++i){
+		if (controllers[i].id = SDL_JoystickInstanceID(joystick)){
+			if (controllers[i].controllerMenuWait == 0){
+				if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
+					j = J_RIGHT;
+					controllers[i].controllerMenuWait++;
+				}
+				if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) < -deadZone)){
+					j = J_LEFT;
+					controllers[i].controllerMenuWait++;
+				}
+				if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) > deadZone)){
+					j = J_DOWN;
+					controllers[i].controllerMenuWait++;
+				}
+				if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTY) < -deadZone)){
+					j = J_UP;
+					controllers[i].controllerMenuWait++;
+				}
+			}
+			if (controllers[i].controllerMenuWait != 0){
+				controllers[i].controllerMenuWait++;
+				if (controllers[i].controllerMenuWait >= 10){
+					controllers[i].controllerMenuWait = 0;
+				}
+			}
 		}
 	}
-	if (menuWait != 0){
-		menuWait++;
-		if (menuWait >= 25){
-			menuWait = 0;
-		}
-	}
-
 	return j;
 }
 
 JoystickDirections InputManager::isLeftJoystickMoved(int i){
 	JoystickDirections j = J_NONE;
-	if (menuWait == 0){
+	if (controllers[i].controllerMenuWait == 0){
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
 			j = J_RIGHT;
-			menuWait++;
+			++controllers[i].controllerMenuWait;
 		}
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTX) < -deadZone)){
 			j = J_LEFT;
-			menuWait++;
+			++controllers[i].controllerMenuWait;
 		}
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTY) > deadZone)){
 			j = J_DOWN;
-			menuWait++;
+			++controllers[i].controllerMenuWait;
 		}
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTY) < -deadZone)){
 			j = J_UP;
-			menuWait++;
+			++controllers[i].controllerMenuWait;
 		}
 	}
-	if (menuWait != 0){
-		menuWait++;
-		if (menuWait >= 10){
-			menuWait = 0;
+	if (controllers[i].controllerMenuWait != 0){
+		++controllers[i].controllerMenuWait;
+		if (controllers[i].controllerMenuWait >= 10){
+			controllers[i].controllerMenuWait = 0;
 		}
 	}
 
@@ -157,12 +179,12 @@ JoystickDirections InputManager::isAnyLeftJoystickMoved(){
 }
 
 bool InputManager::isControllerHeld(int id, SDL_GameControllerButton but){
-	return controllers[id].getButton(but);
+	return controllers[id].buttons[but];
 }
 
 bool InputManager::isControllerPressed(int id, SDL_GameControllerButton but){
-	if(controllers[id].getButton(but)){
-		controllers[id].setButton(but, false);
+	if (controllers[id].buttons[but]){
+		controllers[id].buttons[but] = false;
 		return true;
 	}
 	return false;
@@ -181,8 +203,8 @@ bool InputManager::isControllerPressed(SDL_GameController* id, SDL_GameControlle
 
 bool InputManager::isControllerPressed(SDL_GameControllerButton but){
 	for (Uint8 i = 0; i < controllers.size(); i++){
-		if (controllers[i].getButton(but)){
-			controllers[i].setButton(but, false);
+		if (controllers[i].buttons[but]){
+			controllers[i].buttons[but] = false;
 			return true;
 		}
 	}
@@ -206,7 +228,9 @@ bool InputManager::isPressed(SDL_Keycode k){
 
 InputManager::~InputManager(){
 	for (Uint8 i = 0; i < controllers.size(); i++){
-		SDL_GameControllerClose(controllers[i].controller);
+		if (controllers[i].inUse){
+			gCont = controllers[i].controller;
+			SDL_GameControllerClose(gCont);
+		}
 	}
-	SDL_GameControllerClose(gCont);
 }
