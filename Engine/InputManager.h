@@ -5,17 +5,25 @@
 #include <iostream>
 #include "../SDL2.0\include\SDL.h"
 
-enum JoystickDirections{ J_UP, J_DOWN, J_LEFT, J_RIGHT, J_NONE };
+enum JoystickDirections{ J_NONE, J_UP, J_DOWN, J_LEFT, J_RIGHT };
 
-struct Controller{
-	bool inUse;
-	int  id;
-	int  controllerMenuWait;
-	
-	SDL_GameController	*	controller;
-	std::map<SDL_GameControllerButton, bool> buttons;
+class Controller{
+public:
+	Controller() : inUse(false), joyId(-1), controller(nullptr), controllerMenuWait(0), alreadyPressed(false) {}
+	bool					inUse;
+	int						controllerMenuWait;
+	SDL_JoystickID			joyId;				
+	SDL_GameController *	controller;
+	std::map<SDL_GameControllerButton, bool>	buttons;
 
-	Controller() : controllerMenuWait(0), inUse(false), controller(nullptr){}
+	void controllerAction(const SDL_ControllerButtonEvent);
+	void addGameController(int id);
+	void closeController();
+private:
+	bool alreadyPressed;
+	int	 instanceID;
+
+
 };
 
 class InputManager{
@@ -27,49 +35,36 @@ public:
 
 	void	pollEvent();
 	void	setDeadzone(int i)	{ deadZone	= i;	 }
-	void	quit()				{ run		= false; }
 	int		getDeadzone()		{ return deadZone;	 }
+	void	quit()				{ run		= false; }
 	bool	checkQuit()			{ return run;		 }
-	bool isHeld(SDL_Keycode k)	{ return keysH[k];	 }
-
-	int numControllers(){
-		int j = 0;
-		for (int i = 0; i < controllers.size(); ++i){
-			if (controllers[i].inUse == true){
-				j++;
-		}	}
-		return j; 
-	}
-
-	Controller getController(int i){ return controllers[i]; }
 
 	JoystickDirections isLeftJoystickMoved(SDL_GameController*);
 	JoystickDirections isLeftJoystickMoved(int);
 	JoystickDirections isAnyLeftJoystickMoved();
-
-	bool isControllerPressed(SDL_GameController*, SDL_GameControllerButton);
-	bool isControllerPressed(int, SDL_GameControllerButton);
-	bool isControllerPressed(SDL_GameControllerButton);
-	bool isControllerHeld(int, SDL_GameControllerButton);
-	bool isPressed(SDL_Keycode);
-	bool isAnyKeyPressed();
+	
+	bool	isControllerAvailble(int id){ 	return controllers[id].inUse;	}
+	bool	isHeld(SDL_Keycode k)		{	return keysH[k];				}
+	bool	isAnyKeyPressed();
+	bool	isPressed(SDL_Keycode);
+	bool	isControllerPressed(SDL_GameController*, SDL_GameControllerButton);
+	bool	isControllerPressed(SDL_GameControllerButton, int = -1);
+	bool	isControllerHeld(int, SDL_GameControllerButton);
 	
 	~InputManager();
 private:
 	InputManager();
-	void addGameController(int id);
-	void removeGameController(int id);
-	SDL_GameController *		gCont;
+	void removeGameController();
+	int getIndex(SDL_JoystickID);
+	int getAvailController();
+	void reload();
+
 	SDL_Event					event;
 	std::map<int, bool>			keysP;
 	std::map<int, bool>			keysH;
 	std::map<int, Controller>	controllers;
 
-	int menuWait;
-	int deadZone;
-	int controllerIndex;
-	bool alreadyPressed;
-	bool run;
-	bool anyKey;
+	int menuWait, deadZone, controllerIndex;
+	bool alreadyPressed, run, anyKey;
 };
 #endif /* defined  (_INPUTMANAGER_H_) */

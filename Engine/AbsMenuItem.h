@@ -132,4 +132,23 @@ private:
 	SDL_Color onColour;
 	SDL_Color altColour;
 };
+
+class  PopUpMenu : public TextureItem{
+public:
+	PopUpMenu() : TextureItem(), selectedButton(0){}
+
+	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i){ g->draw(texture, position); for (auto b : buttons){ b->draw(g, i); } }
+	virtual PopUpMenu &addButton(ExecutableMenuItem* b){ buttons.push_back(b); return *this; }
+	
+	void operator++(){
+		if (selectedButton != buttons.size()-1)
+			selectedButton++;	}
+	void operator--(){
+		if (selectedButton != 0)
+			selectedButton--;	}
+	int getSelectedButton(){ return selectedButton; }
+private:
+	int selectedButton;
+	std::vector<ExecutableMenuItem*> buttons;
+};
 #endif /* defined (_ABSMENUITEM_H_)*/

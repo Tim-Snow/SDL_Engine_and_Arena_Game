@@ -74,7 +74,7 @@ bool GraphicsEngine::makeWindow(int width, int height, bool fullscreen_){
 		flags = SDL_WINDOW_SHOWN;
 		window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowedWidth, windowedHeight, flags);
 	}
-
+	//SDL_RenderSetLogicalSize(renderer, currentDisplay.w, currentDisplay.h);
 	if (window == nullptr) { return false; }
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);

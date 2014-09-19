@@ -3,31 +3,56 @@
 InputManager::InputManager() : run(true), anyKey(false), alreadyPressed(false), menuWait(0), deadZone(10000){
 	SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER);
 
-	for (controllerIndex = 0; controllerIndex < SDL_NumJoysticks(); controllerIndex++){
-		addGameController(controllerIndex);
+	for (controllerIndex = 0; controllerIndex < SDL_NumJoysticks(); ++controllerIndex){
+		controllers[getAvailController()].addGameController(controllerIndex);
+	}
+	reload();
+}
+
+//Sets any disconnected controllers to -1, rechecks currently opened controllers incase joy id had changed
+void InputManager::reload(){
+	for (int j = 0; j < controllers.size(); j++){
+		if (controllers[j].inUse){
+			SDL_Joystick* joystick = SDL_GameControllerGetJoystick(controllers[j].controller);
+			controllers[j].joyId = SDL_JoystickInstanceID(joystick);
+
+			if (controllers[j].joyId == -1){
+				controllers[j].inUse = false;
+			}
+			std::cout << "Controller at: " << j << " joyId: " << controllers[j].joyId << " in use: " << controllers[j].inUse << std::endl;
+}	}	}
+
+void Controller::addGameController(int id){
+	controller = SDL_GameControllerOpen(id);
+	if (controller != nullptr){
+		instanceID = id;
+		inUse = true;
+}	}
+
+//Removes any controller with -1 joy id
+void InputManager::removeGameController(){
+	for (int i = 0; i < controllers.size(); i++){
+		if (controllers[i].controller != nullptr && controllers[i].joyId == -1){
+			SDL_GameControllerClose(controllers[i].controller);
+		}
 	}
 }
 
-void InputManager::addGameController(int id){
-	for (int i = 0; i < controllers.size()+1; i++){	//scans through controller map size + 1, meaning if all slots are in use, it will create one
-		if (controllers[i].inUse != true){	//finds first available slot to assign controller
-			gCont = SDL_GameControllerOpen(id);
-			if (gCont != nullptr){
-				SDL_Joystick* joystick		= SDL_GameControllerGetJoystick(gCont);	//joystick used simply for id to talk with event.cdevice.which
-				controllers[i].id			= SDL_JoystickInstanceID(joystick);
-				controllers[i].inUse		= true;
-				controllers[i].controller	= gCont;
-				std::cout << "Controller detected: " << i << std::endl;
-				break;	//if it has gotten this far, the controller has been added for the correct id, so stop the loop
-	}	}	}	}
-
-void InputManager::removeGameController(int id){
+//Find what mapped controller has the same joystick id
+int InputManager::getIndex(SDL_JoystickID id){
 	for (int i = 0; i < controllers.size(); i++){
-		if (controllers[i].id == id && controllers[i].inUse == true){
-			gCont = controllers[i].controller;
-			SDL_GameControllerClose(gCont);
-			controllers[i].inUse = false;
-			std::cout << "Controller removed: " << i << std::endl;
+		if (controllers[i].inUse && controllers[i].joyId == id){
+			return i;
+		}
+	}
+	return -1; //id of invalid joysticks
+}
+
+//Finds first entry in controller map that is empty, able to make the map 'grow'
+int InputManager::getAvailController(){
+	for (int i = 0; i < controllers.size() + 1; i++){
+		if (!controllers[i].inUse){
+			return i;
 		}
 	}
 }
@@ -39,10 +64,12 @@ void InputManager::pollEvent(){
 			run = false;
 			break;
 		case SDL_CONTROLLERDEVICEADDED:
-			addGameController(event.cdevice.which);		
+			controllers[getAvailController()].addGameController(event.cdevice.which);
+			reload();
 			break;
 		case SDL_CONTROLLERDEVICEREMOVED:
-			removeGameController(event.cdevice.which);
+			reload();
+			removeGameController();
 			break;
 		case SDL_KEYDOWN:
 			if (event.key.repeat == 0){
@@ -61,19 +88,13 @@ void InputManager::pollEvent(){
 			keysH[event.key.keysym.sym] = false;
 			break;
 		case SDL_CONTROLLERBUTTONDOWN:
-			for (int i = 0; i < controllers.size(); ++i){
-				if (controllers[i].id == event.cdevice.which){
-					controllers[i].buttons[(SDL_GameControllerButton)event.cbutton.button] = true;
-				}
-			}
+			controllerIndex = getIndex(event.cbutton.which);
+			controllers[controllerIndex].controllerAction(event.cbutton);
 			anyKey = true;
 			break;
 		case SDL_CONTROLLERBUTTONUP:
-			for (int i = 0; i < controllers.size(); ++i){
-				if (controllers[i].id == event.cdevice.which){
-					controllers[i].buttons[(SDL_GameControllerButton)event.cbutton.button] = false;
-				}
-			}
+			controllerIndex = getIndex(event.cbutton.which);
+			controllers[controllerIndex].controllerAction(event.cbutton);
 			anyKey = false;
 			break;
 		default:
@@ -82,11 +103,23 @@ void InputManager::pollEvent(){
 	}
 }
 
+void Controller::controllerAction(const SDL_ControllerButtonEvent e){
+	buttons[(SDL_GameControllerButton)e.button] = e.state;
+}
+
 JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
 	JoystickDirections j = J_NONE;
 	SDL_Joystick* joystick = SDL_GameControllerGetJoystick(c);
-	for (int i = 0; i<numControllers(); ++i){
-		if (controllers[i].id = SDL_JoystickInstanceID(joystick)){
+
+	for (int i = 0; i<controllers.size(); ++i){
+		if (controllers[i].joyId = SDL_JoystickInstanceID(joystick)){
+			if (controllers[i].controllerMenuWait != 0){
+				controllers[i].controllerMenuWait++;
+				if (controllers[i].controllerMenuWait >= 10){
+					controllers[i].controllerMenuWait = 0;
+				}
+			}
+
 			if (controllers[i].controllerMenuWait == 0){
 				if ((SDL_GameControllerGetAxis(c, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
 					j = J_RIGHT;
@@ -105,12 +138,6 @@ JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
 					controllers[i].controllerMenuWait++;
 				}
 			}
-			if (controllers[i].controllerMenuWait != 0){
-				controllers[i].controllerMenuWait++;
-				if (controllers[i].controllerMenuWait >= 10){
-					controllers[i].controllerMenuWait = 0;
-				}
-			}
 		}
 	}
 	return j;
@@ -118,6 +145,14 @@ JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
 
 JoystickDirections InputManager::isLeftJoystickMoved(int i){
 	JoystickDirections j = J_NONE;
+
+	if (controllers[i].controllerMenuWait != 0){
+		++controllers[i].controllerMenuWait;
+		if (controllers[i].controllerMenuWait >= 10){
+			controllers[i].controllerMenuWait = 0;
+		}
+	}
+
 	if (controllers[i].controllerMenuWait == 0){
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTX) > deadZone)){
 			j = J_RIGHT;
@@ -134,12 +169,6 @@ JoystickDirections InputManager::isLeftJoystickMoved(int i){
 		if ((SDL_GameControllerGetAxis(controllers[i].controller, SDL_CONTROLLER_AXIS_LEFTY) < -deadZone)){
 			j = J_UP;
 			++controllers[i].controllerMenuWait;
-		}
-	}
-	if (controllers[i].controllerMenuWait != 0){
-		++controllers[i].controllerMenuWait;
-		if (controllers[i].controllerMenuWait >= 10){
-			controllers[i].controllerMenuWait = 0;
 		}
 	}
 
@@ -182,11 +211,21 @@ bool InputManager::isControllerHeld(int id, SDL_GameControllerButton but){
 	return controllers[id].buttons[but];
 }
 
-bool InputManager::isControllerPressed(int id, SDL_GameControllerButton but){
-	if (controllers[id].buttons[but]){
+bool InputManager::isControllerPressed(SDL_GameControllerButton but, int id){
+	if (id == -1){ //if the default parameter remains (no controller specified), check for all controllers
+		for (Uint8 i = 0; i < controllers.size(); i++){
+			if (isControllerPressed(but, i) && controllers[i].inUse){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	else if (controllers[id].buttons[but]){
 		controllers[id].buttons[but] = false;
 		return true;
 	}
+
 	return false;
 }
 
@@ -201,36 +240,30 @@ bool InputManager::isControllerPressed(SDL_GameController* id, SDL_GameControlle
 	return false;
 }
 
-bool InputManager::isControllerPressed(SDL_GameControllerButton but){
-	for (Uint8 i = 0; i < controllers.size(); i++){
-		if (controllers[i].buttons[but]){
-			controllers[i].buttons[but] = false;
-			return true;
-		}
-	}
-	return false;
-}
-
 bool InputManager::isAnyKeyPressed(){  	
 	if (anyKey){
 		anyKey = false;
 		return true;
 	}
-	else return false;
+	return false;
 }
 
 bool InputManager::isPressed(SDL_Keycode k){
 	if (keysP[k]){
 		keysP[k] = false;
 		return true;
-	} else return false;
+	} 
+	return false;
+}
+
+void Controller::closeController(){
+	if (controller != nullptr)
+		SDL_GameControllerClose(controller);
 }
 
 InputManager::~InputManager(){
-	for (Uint8 i = 0; i < controllers.size(); i++){
-		if (controllers[i].inUse){
-			gCont = controllers[i].controller;
-			SDL_GameControllerClose(gCont);
-		}
+	for (int i = 0; i < controllers.size(); i++){
+		controllers[i].closeController();
 	}
+	controllers.clear();
 }

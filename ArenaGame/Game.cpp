@@ -18,8 +18,8 @@ void Game::loadResources(){
 	surf = ResourceLoader::loadImage("res/menuBackground.png");
 	ResourceLoader::addResource("menuBG", gfx->makeTextureFromSurf(surf));
 
-	surf = ResourceLoader::loadImage("res/spritesheet2.png");
-	ResourceLoader::addResource("spritesheet2", gfx->makeTextureFromSurf(surf));
+	surf = ResourceLoader::loadImage("res/spritesheet.png");
+	ResourceLoader::addResource("spritesheet", gfx->makeTextureFromSurf(surf));
 
 	surf = ResourceLoader::loadImage("res/level.png");
 	ResourceLoader::addResource("levelBG", gfx->makeTextureFromSurf(surf));
@@ -50,10 +50,12 @@ void Game::loadResources(){
 	ResourceLoader::addResource("resolutionText",	gfx->getTextTexture("Resolution",					gfx->getFont(), fontColour));
 	ResourceLoader::addResource("acceptText",		gfx->getTextTexture("Accept",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("backText",			gfx->getTextTexture("Back",							gfx->getFont(), fontColour));
+	ResourceLoader::addResource("warriorText",		gfx->getTextTexture("Warrior",						gfx->getFont(), fontColour));
+	ResourceLoader::addResource("wizardText",		gfx->getTextTexture("Wizard",						gfx->getFont(), fontColour));
+	ResourceLoader::addResource("fighterText",		gfx->getTextTexture("Fighter",						gfx->getFont(), fontColour));
+	ResourceLoader::addResource("tacticianText",	gfx->getTextTexture("Tactician",					gfx->getFont(), fontColour));
 
-	//char select player quadrant border
-	//characters and items from spritesheet
-	//level sprite sheet
+	//Need spritesheet loader to create individual texture for each part rather than 1 big image
 	SDL_FreeSurface(surf);
 }
 

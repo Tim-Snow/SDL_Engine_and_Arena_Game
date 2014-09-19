@@ -1,7 +1,4 @@
 #include "MenuSystem.h"
-#include "../ArenaGame/Game.h"
-
-void MenuSystem::init(){ }
 
 void MenuSystem::handleEvent(){
 	menuInput = NONE;
@@ -73,10 +70,6 @@ void MenuSystem::addButton(ExecutableMenuItem * m){
 	m->setBorderCol(borderCol);
 	m->setSelBorderCol(selBorderCol);
 	buttons.push_back(m);
-}
-
-void MenuSystem::addItem(MenuItem* i){
-	items.push_back(i);
 }
 
 void MenuSystem::clean(){

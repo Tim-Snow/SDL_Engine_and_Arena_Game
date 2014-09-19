@@ -5,24 +5,22 @@
 
 class GameObject : public AbstractGameObj{
 public:
-	GameObject();
+	GameObject() : AbstractGameObj(){}
 	GameObject(double x, double y, int w, int h, bool grav, bool vis);
 
-	void move();
-	bool getVisible();
-	bool getGravity();
-	SDL_Rect getRect();
-
-	void update();
-	void draw();
-
-	SDL_Texture * getTexture();
-	void addTextureToObject(SDL_Texture * t);
-	
-	~GameObject();
+	~GameObject(){}
 private:
 protected:
+	void move(){}
+	void update(){}
+	void draw(){}
 
+	void addTextureToObject(SDL_Texture * t){ texture = t; }
+
+	bool getVisible()			{ return visible;			}
+	bool getGravity()			{ return gravity;			}
+	SDL_Rect getRect()			{ return rect.getRect2();	}
+	SDL_Texture * getTexture()	{ return texture;			}
 };
 
 #endif /* defined (_GAMEOBJECT_H_) */
