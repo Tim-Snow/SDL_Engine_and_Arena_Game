@@ -3,6 +3,8 @@
 
 #include "../SDL2.0\include\SDL.h"
 #include "../SDL2_TTF\include\SDL_ttf.h"
+#include "GraphicsEngine.h"
+#include <memory>
 
 struct Rect2f{
 	float x, y, w, h;
@@ -15,6 +17,11 @@ struct Rect2f{
 
 class AbstractGameObj{
 public:
+private:
+protected:
+	AbstractGameObj();
+	AbstractGameObj(double x, double y, int w, int h, bool grav, bool vis);
+
 	virtual bool getVisible() = 0;
 	virtual bool getGravity() = 0;
 	virtual SDL_Texture * getTexture() = 0;
@@ -22,10 +29,6 @@ public:
 	virtual void addTextureToObject(SDL_Texture * t) = 0;
 	virtual void update() = 0;
 	virtual void draw() = 0;
-private:
-protected:
-	AbstractGameObj();
-	AbstractGameObj(double x, double y, int w, int h, bool grav, bool vis);
 
 	SDL_Texture * texture;
 	Rect2f rect;
