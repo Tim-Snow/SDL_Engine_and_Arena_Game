@@ -1,7 +1,13 @@
 #include "CharSelectState.h"
 
-void goPlay(){
-	PlayState * play = new PlayState();
+void CharSelectState::goPlay(){
+	std::vector<Player> player;
+	for (auto p : players){
+		if (p->getState() == READY)
+			player.push_back(p->getPlayer());
+	}
+	PlayState * play = new PlayState(player);
+	player.clear();
 	StateManager::instance().pushState(play);
 }
 
@@ -78,15 +84,16 @@ void CharSelectState::draw(){
 	}
 }
 
-playerQuarter::playerQuarter(const int i, SDL_Rect p) : id(i), pos(p), selectedButton(0), playerInput(NONE), thisPlayerState(NOT_PLAYING), bg(ResourceLoader::getResource("menuBG")){
-	player.setClass(WARRIOR);
-	theChar = ResourceLoader::getResource("spritesheet");
+playerQuarter::playerQuarter(const int i, SDL_Rect p) : id(i), pos(p), playerPos(p), selectedButton(0), playerInput(NONE), thisPlayerState(NOT_PLAYING){
+	player.setClass(NO_CLASS);
+	playerPos.y += 50;
+	bg = ResourceLoader::getSprite("MenuBG");
 	//for sub menu position
 	menuPos.x = pos.x + 20;	menuPos.y = pos.y + 40; menuPos.w = pos.w - 40;	menuPos.h = pos.h / 3;
 	SDL_Rect itemPos = { menuPos.x + 10, menuPos.y +15, menuPos.w - 20, (menuPos.h - 20)/5 };
 
 	//Init for the class select sub menu
-	charClass.setTexture(ResourceLoader::getResource("menuBG")).setPosition(menuPos);
+	charClass.setTexture(ResourceLoader::getSprite("MenuBG")).setPosition(menuPos);
 	warrior.setTexture(ResourceLoader::getResource("warriorText")).setID(0).setPosition(itemPos).setFunc(nullptr).setBorderSize(10).setBorderCol({ 30, 30, 30, 255 }).setSelBorderCol({ 200, 200, 200, 255 });
 	itemPos.y += (menuPos.h - 20) / 4;
 	fighter.setTexture(ResourceLoader::getResource("fighterText")).setID(1).setPosition(itemPos).setFunc(nullptr).setBorderSize(10).setBorderCol({ 30, 30, 30, 255 }).setSelBorderCol({ 200, 200, 200, 255 });
@@ -115,7 +122,7 @@ playerQuarter::playerQuarter(const int i, SDL_Rect p) : id(i), pos(p), selectedB
 	itemPos.x += pos.w / 2 -10;
 	talents.setTexture(ResourceLoader::getResource("talentText")).setID(1).setPosition(itemPos).setFunc(nullptr).setBorderSize(10).setBorderCol({ 30, 30, 30, 255 }).setSelBorderCol({ 200, 200, 200, 255 });
 	itemPos.y -= 60; itemPos.x -= pos.w / 2 - 20; itemPos.w += itemPos.w;
-	curClass.setTexture(ResourceLoader::getResource("warriorText")).setPosition(itemPos);
+	curClass.setTexture(ResourceLoader::getResource("pickClassText")).setPosition(itemPos);
 
 	itemPos = { p.x + 20, p.y + pos.h - 100, p.w - 40, 40 };
 	accept.setTexture(ResourceLoader::getResource("acceptText")).setID(2).setPosition(itemPos).setFunc(nullptr).setBorderSize(10).setBorderCol({ 30, 30, 30, 255 }).setSelBorderCol({ 200, 200, 200, 255 });
@@ -146,7 +153,7 @@ void playerQuarter::handleEvent(std::shared_ptr<InputManager> i){
 		if (i->isControllerPressed(SDL_CONTROLLER_BUTTON_DPAD_DOWN, id) || (i->isLeftJoystickMoved(id) == J_RIGHT) || (i->isLeftJoystickMoved(id) == J_DOWN))
 			playerInput = DOWN;
 
-		if (thisPlayerState == EDITING && i->isControllerPressed(SDL_CONTROLLER_BUTTON_START, id))
+		if (thisPlayerState == EDITING && i->isControllerPressed(SDL_CONTROLLER_BUTTON_START, id) && player.getClass() != NO_CLASS)
 			thisPlayerState = READY;
 
 		if (i->isControllerPressed(SDL_CONTROLLER_BUTTON_B, id))
@@ -154,55 +161,49 @@ void playerQuarter::handleEvent(std::shared_ptr<InputManager> i){
 
 		if (i->isControllerPressed(SDL_CONTROLLER_BUTTON_A, id))
 			playerInput = ACCEPT;
-	} else {
-		thisPlayerState = NO_CONTROLLER;
-	}
+
+	} else { thisPlayerState = NO_CONTROLLER; }
 }
 
 void playerQuarter::update(double d){
 	switch (thisPlayerState){
-	case READY:		if (playerInput == BACK)	thisPlayerState = EDITING;		break;
+	case READY:	if (playerInput == BACK)   thisPlayerState = EDITING;	break;
 	case NOT_PLAYING:
 		if (playerInput == ACCEPT){
 			selectedButton = 0;
 			thisPlayerState = EDITING;
 		}
-		if (playerInput == BACK)
-			playerInput = BACK;
 		break;
-	case EDITING:	
+	case EDITING:
+		if (playerInput == BACK)	thisPlayerState = NOT_PLAYING;
+
 		if (playerInput == UP){
 			if (selectedButton != 0)
 				selectedButton--;
 		}
 		if (playerInput == DOWN){
-			if (selectedButton != buttons.size()-1)
+			if (selectedButton != buttons.size() - 1)
 				selectedButton++;
 		}
-		if (playerInput == BACK)
-			thisPlayerState = NOT_PLAYING;
-		
+
 		if (playerInput == ACCEPT){
 			switch (selectedButton){
-			case 0:	thisPlayerState = CLASS_SELECT;	 break;
+			case 0:		thisPlayerState = CLASS_SELECT;	 break;
 			//case 1:	thisPlayerState = TALENT_SELECT; break;
-			case 2: thisPlayerState = READY; 		 break;
-			case 3:									 break;
-			case 4:									 break;
-			case 5: thisPlayerState = NOT_PLAYING;	 break;
-			default:
-				break;
+			case 2: if (player.getClass() != NO_CLASS)
+						thisPlayerState = READY; 		 break;
+			case 3:										 break;
+			case 4:										 break;
+			case 5:		thisPlayerState = NOT_PLAYING;	 break;
+			default:	break;
 			}
 		}
 		break;
-
 	case CLASS_SELECT:
-		if (playerInput == UP)
-			charClass--;
-		if (playerInput == DOWN)
-			charClass++;
-		if (playerInput == BACK)
-			thisPlayerState = EDITING;
+		if (playerInput == UP)		charClass--;
+		if (playerInput == DOWN)	charClass++;
+		if (playerInput == BACK)	thisPlayerState = EDITING;
+
 		if (playerInput == ACCEPT){
 			player.setClass((playerClasses)charClass.getSelectedButton());
 			thisPlayerState = EDITING;
@@ -211,26 +212,23 @@ void playerQuarter::update(double d){
 			case FIGHTER:	curClass.setTexture(ResourceLoader::getResource("fighterText"));	break;
 			case WIZARD:	curClass.setTexture(ResourceLoader::getResource("wizardText"));		break;
 			case TACTICIAN:	curClass.setTexture(ResourceLoader::getResource("tacticianText"));	break;
-			default:
-				break;
+			default:		break;
 			}
 		}
 	case TALENT_SELECT:
-	case SKILL_SELECT:		
+	case SKILL_SELECT:
 		break;
 	case NO_CONTROLLER:
-	default:
-		break;
+	default:	break;
 	}
 }
 
 void playerQuarter::draw(std::shared_ptr<GraphicsEngine> g){
-	g->draw(bg, pos);
+	g->drawFromSpritesheet(bg, pos);
 	
 	if (thisPlayerState != NOT_PLAYING && thisPlayerState != NO_CONTROLLER){
 		curClass.draw(g);
-		g->drawFromSpritesheet(theChar, { 0, 960, 128, 128 }, { pos.x + 20, pos.y + 120, pos.w - 40, pos.w - 40 });
-		g->drawFromSpritesheet(theChar, { 64, 1088, 128, 64 }, { pos.x + 90, pos.y + 200, 128, 64 });
+		player.draw(g, playerPos);
 		for (auto b : buttons){
 			b->draw(g, selectedButton);
 		}

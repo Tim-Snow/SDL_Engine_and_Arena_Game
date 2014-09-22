@@ -10,8 +10,11 @@ enum playerStates { NO_CONTROLLER, NOT_PLAYING, EDITING, CLASS_SELECT, TALENT_SE
 
 class playerQuarter{
 public:
-	MENU_COMMANDS	getInput(){ return playerInput;		}
-	playerStates	getState(){ return thisPlayerState; }
+	playerQuarter(const int i, SDL_Rect p);
+
+	MENU_COMMANDS	getInput() { return playerInput;	}
+	playerStates	getState() { return thisPlayerState;}
+	Player			getPlayer(){ return player;			}
 	void			setState(playerStates p){ thisPlayerState = p; }
 
 	void update(double d);
@@ -21,21 +24,18 @@ public:
 		for (auto b : buttons){
 			b->clean();
 	}	}
-
-	playerQuarter(const int i, SDL_Rect p);
 private:
 	const int		id;
 	int				selectedButton;
 	MENU_COMMANDS	playerInput;
-	SDL_Rect		pos, menuPos;
+	SDL_Rect		pos, menuPos, playerPos;
 	playerStates	thisPlayerState;
 	TextureItem		ready, pressToJoin, noConnect, curClass;
 	MenuButton		accept, cClass, talents, back, load, save, warrior, fighter, wizard, tactician;
 	PopUpMenu		charClass, charSkills, charTalents;
 	Player			player;
-	
-	SDL_Texture *	bg;
-	SDL_Texture *	theChar;
+	Sprite			bg;
+
 	std::vector<ExecutableMenuItem*> buttons;
 };
 
@@ -52,6 +52,8 @@ public:
 			p->clean();
 	}	}
 private:
+	void goPlay();
+
 	int readyPlayers;
 	TextureItem title;
 	std::vector<playerQuarter*> players;

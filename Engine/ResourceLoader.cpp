@@ -1,13 +1,6 @@
 #include "ResourceLoader.h"
 std::map<const char*, SDL_Texture*> ResourceLoader::resources;
-
-void ResourceLoader::addResource(const char* name, SDL_Texture* t){ 
-	resources[name] = t; 
-}
-
-SDL_Texture * ResourceLoader::getResource(const char* name){
-	return resources[name]; 
-}
+std::map<const char*, Sprite> ResourceLoader::sprites;
 
 std::string ResourceLoader::readTextFile(const char* t) {
 	std::string content;

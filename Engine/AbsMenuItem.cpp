@@ -59,7 +59,13 @@ void MenuButton::draw(std::shared_ptr<GraphicsEngine> g, int i){
 
 	g->drawRect(position, background);
 
-	g->draw(texture, textPosition);
+	if (texture != nullptr){
+		g->draw(texture, textPosition);
+	}
+	else {
+		if (sprite.getTexture() != nullptr)
+			g->drawFromSpritesheet(sprite, textPosition);
+	}
 }
 
 void NoTextureItem::draw(std::shared_ptr<GraphicsEngine> g){
@@ -67,5 +73,10 @@ void NoTextureItem::draw(std::shared_ptr<GraphicsEngine> g){
 }
 
 void TextureItem::draw(std::shared_ptr<GraphicsEngine> g){
-	g->draw(texture, position);
+	if (texture != nullptr){
+		g->draw(texture, position);
+	} else {
+		if (sprite.getTexture() != nullptr)
+			g->drawFromSpritesheet(sprite, position);
+	}
 }

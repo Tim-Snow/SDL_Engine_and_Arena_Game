@@ -20,6 +20,19 @@ void Game::loadResources(){
 
 	surf = ResourceLoader::loadImage("res/spritesheet.png");
 	ResourceLoader::addResource("spritesheet", gfx->makeTextureFromSurf(surf));
+	ResourceLoader::addSprite("MenuBG", ResourceLoader::getResource("spritesheet"), { 256, 0, 256, 256 });
+	ResourceLoader::addSprite("MenuBG2", ResourceLoader::getResource("spritesheet"), { 0, 0, 256, 256 });
+	ResourceLoader::addSprite("Player", ResourceLoader::getResource("spritesheet"), { 0, 512, 256, 256 });
+	ResourceLoader::addSprite("PlayerLegs1", ResourceLoader::getResource("spritesheet"), { 256, 512, 256, 256 });
+	ResourceLoader::addSprite("PlayerLegs2", ResourceLoader::getResource("spritesheet"), { 512, 512, 256, 256 });
+	ResourceLoader::addSprite("PlayerLegs3", ResourceLoader::getResource("spritesheet"), { 768, 512, 256, 256 });
+	ResourceLoader::addSprite("PlayerArms", ResourceLoader::getResource("spritesheet"), { 0, 256, 256, 256 });
+	ResourceLoader::addSprite("Sword", ResourceLoader::getResource("spritesheet"), { 256, 768, 256, 256 });
+	ResourceLoader::addSprite("Fist", ResourceLoader::getResource("spritesheet"), { 0, 768, 256, 256 });
+	ResourceLoader::addSprite("Wand", ResourceLoader::getResource("spritesheet"), { 512, 768, 256, 256 });
+	ResourceLoader::addSprite("Gun", ResourceLoader::getResource("spritesheet"), { 768, 768, 256, 256 });
+	ResourceLoader::addSprite("Moon", ResourceLoader::getResource("spritesheet"), { 1024, 512, 256, 256 });
+	ResourceLoader::addSprite("Sun", ResourceLoader::getResource("spritesheet"), { 1024, 768, 256, 256 });
 
 	surf = ResourceLoader::loadImage("res/level.png");
 	ResourceLoader::addResource("levelBG", gfx->makeTextureFromSurf(surf));
@@ -50,6 +63,7 @@ void Game::loadResources(){
 	ResourceLoader::addResource("resolutionText",	gfx->getTextTexture("Resolution",					gfx->getFont(), fontColour));
 	ResourceLoader::addResource("acceptText",		gfx->getTextTexture("Accept",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("backText",			gfx->getTextTexture("Back",							gfx->getFont(), fontColour));
+	ResourceLoader::addResource("pickClassText",	gfx->getTextTexture("Select a class!",				gfx->getFont(), fontColour));
 	ResourceLoader::addResource("warriorText",		gfx->getTextTexture("Warrior",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("wizardText",		gfx->getTextTexture("Wizard",						gfx->getFont(), fontColour));
 	ResourceLoader::addResource("fighterText",		gfx->getTextTexture("Fighter",						gfx->getFont(), fontColour));

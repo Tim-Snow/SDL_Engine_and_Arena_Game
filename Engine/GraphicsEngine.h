@@ -16,7 +16,7 @@ public:
 	int			getWindowHeight();
 	int			gcd(int a, int b);
 	SDL_Rect	setRectToMiddle(int sizeW, int sizeH);
-
+	
 	bool makeWindow(int w, int h, bool fullscreen);
 	void getPossibleResolutions();
 	void setTitle(std::string n);
@@ -27,7 +27,7 @@ public:
 
 	void drawFullBG(SDL_Texture*);
 	void draw(SDL_Texture*, SDL_Rect);
-	void drawFromSpritesheet(SDL_Texture*, SDL_Rect, SDL_Rect);
+	void drawFromSpritesheet(Sprite, SDL_Rect);
 	void drawSquare(int x, int y, int w, int r, int g, int b);
 	void drawRect(int x, int y, int w, int h, int r, int g, int b);
 	void drawRect(SDL_Rect rect, int r, int g, int b);

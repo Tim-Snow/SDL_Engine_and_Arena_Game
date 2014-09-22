@@ -36,22 +36,23 @@ void PlayState::update(double d){
 }
 
 void PlayState::handleEvent(){
-	if (input->isPressed(SDLK_ESCAPE)){
+	if (input->isPressed(SDLK_ESCAPE))
 		StateManager::instance().popState();
-	}
 }
 
 void PlayState::draw(){
 	gfx->drawFullBG(bg);
-
+	gfx->drawFromSpritesheet(ResourceLoader::getSprite("Sun"), { sx, sy, 128, 128 });
 	for (int i = 0; i < nodes.size(); i++){
 		gfx->drawLine(light.x, light.y, nodes.at(i).getNodeX(), nodes.at(i).getNodeY(), 1500);
 	}	
-	
-	gfx->drawFromSpritesheet(sun, { 256, 0, 128, 128 }, { sx, sy, 128, 128 });
-	gfx->drawFromSpritesheet(block, { 0, 512, 128, 128 }, { 500, 500, 64, 64 });
-	gfx->drawFromSpritesheet(block, { 128, 512, 128, 128 }, { 564, 500, 64, 64 });
-	gfx->drawFromSpritesheet(block, { 256, 512, 128, 128 }, { 627, 500, 64, 64 });
+
+	for (auto player : players){
+		player.draw(gfx);
+	}
+	//gfx->drawFromSpritesheet(block, { 0, 512, 128, 128 }, { 500, 500, 64, 64 });
+	//gfx->drawFromSpritesheet(block, { 128, 512, 128, 128 }, { 564, 500, 64, 64 });
+	//gfx->drawFromSpritesheet(block, { 256, 512, 128, 128 }, { 627, 500, 64, 64 });
 }
 
 void PlayState::clean(){}

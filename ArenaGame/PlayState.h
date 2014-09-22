@@ -2,6 +2,7 @@
 #define PLAYSTATE_H_
 
 #include "../Engine/MenuSystem.h"
+#include "Player.h"
 
 struct node{
 	int x, y;
@@ -13,6 +14,7 @@ struct node{
 
 class PlayState : public State{
 public:
+	PlayState(std::vector<Player> p){ players = p; }
 	void init();
 	void clean();
 
@@ -29,6 +31,7 @@ private:
 	int sx, sy , cx, cy, r;
 	double t;
 
-	std::vector<node> nodes;
+	std::vector<Player> players;
+	std::vector<node>	nodes;
 };
 #endif /* defined (_PLAYSTATE_H_)*/

@@ -1,6 +1,6 @@
 #ifndef ABSMENUITEM_H_
 #define ABSMENUITEM_H_
-
+//TODO add sprite support for everything
 #include "State.h"
 
 class MenuItem{
@@ -38,8 +38,10 @@ public:
 
 	virtual TextureItem &setTexture(const char *, SDL_Color c, std::shared_ptr<GraphicsEngine>);
 	virtual TextureItem &setTexture(SDL_Texture * t)	 { texture = t; return *this; }
+	virtual TextureItem	&setTexture(Sprite		  s)	 { sprite =  s; return *this; }
 protected:
 	SDL_Texture * texture;
+	Sprite		  sprite;
 };
 
 class ExecutableMenuItem{
@@ -94,18 +96,20 @@ public:
 		textPosition.y += 5;
 	return *this; }
 	virtual ExecTextureItem &setTexture(const char *, std::shared_ptr<GraphicsEngine> g);
-	virtual ExecTextureItem &setTexture(SDL_Texture * t)	 { texture = t; return *this; }
-	virtual ExecTextureItem &setFontColour(SDL_Color c)		 { fontColour = c; return *this; }
+	virtual ExecTextureItem &setTexture(SDL_Texture * t)	 { texture = t;    return *this; }
+	virtual ExecTextureItem &setTexture(Sprite		  s)	 { sprite = s;	   return *this; }
+	virtual ExecTextureItem &setFontColour(SDL_Color  c)	 { fontColour = c; return *this; }
 	virtual ExecTextureItem &setBackgroundColour(SDL_Color c){ background = c; return *this; }
 	
 	ExecTextureItem() : ExecutableMenuItem(), texture(nullptr), background({0,0,0,0}){}
 protected:
 	ExecTextureItem(SDL_Rect p, int id, SDL_Texture * texture_) : ExecutableMenuItem(id, p), texture(texture_), background({ 0, 0, 0, 0 }){}
 	ExecTextureItem(SDL_Rect p, int id, const char * text, SDL_Color fontColour_, std::shared_ptr<GraphicsEngine> g);
-	SDL_Texture * texture;
-	SDL_Rect textPosition;
-	SDL_Color fontColour;
-	SDL_Color background;
+
+	SDL_Texture *	texture;
+	Sprite			sprite;
+	SDL_Rect		textPosition;
+	SDL_Color		fontColour, background;
 };
 
 class MenuButton : public ExecTextureItem{
@@ -137,7 +141,7 @@ class  PopUpMenu : public TextureItem{
 public:
 	PopUpMenu() : TextureItem(), selectedButton(0){}
 
-	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i){ g->draw(texture, position); for (auto b : buttons){ b->draw(g, i); } }
+	virtual void draw(std::shared_ptr<GraphicsEngine> g, int i){ TextureItem::draw(g); for (auto b : buttons){ b->draw(g, i); } }
 	virtual PopUpMenu &addButton(ExecutableMenuItem* b){ buttons.push_back(b); return *this; }
 	
 	void operator++(){
