@@ -107,6 +107,10 @@ void Controller::controllerAction(const SDL_ControllerButtonEvent e){
 	buttons[(SDL_GameControllerButton)e.button] = e.state;
 }
 
+int InputManager::getControllerAxisValue(int id, SDL_GameControllerAxis a){
+	return SDL_GameControllerGetAxis(controllers[id].controller, a);
+}
+
 JoystickDirections InputManager::isLeftJoystickMoved(SDL_GameController* c){
 	JoystickDirections j = J_NONE;
 	SDL_Joystick* joystick = SDL_GameControllerGetJoystick(c);

@@ -5,29 +5,25 @@ void PlayState::init(){
 	r = 350;
 	cx = gfx->getWindowWidth() / 2;
 	cy = gfx->getWindowHeight() / 2;
-	sun = block = ResourceLoader::getResource("spritesheet");
+	
+	GameObject g = { 256, 256, true, false, true };
+	block = ResourceLoader::getSprite("Ground");
+	g.addSpriteToObject(block);
+	g.setPosition({ 0.0, 500.0 });
+	theLevel.addObjectToWorld(g);
+	//theLevel.addObjectToWorld(g);
+	//g.setPosition({ 256.0, 500.0 });
+	g.setPosition({ 600.0, 500.0 });
+	theLevel.addObjectToWorld(g);
+
+	sun = ResourceLoader::getSprite("Sun");
 	bg = ResourceLoader::getResource("dayBG");
 	light = { 0, 0, 4, 4 };
-	node a, b, c, d, e, f, g, h;
-	a.setNode(500, 500);
-	b.setNode(500, 564);
-	c.setNode(564, 500);
-	d.setNode(564, 564);
-	e.setNode(628, 500);
-	f.setNode(628, 564);
-	g.setNode(692, 500);
-	h.setNode(692, 564);
-	nodes.push_back(a);
-	nodes.push_back(b);
-	nodes.push_back(c);
-	nodes.push_back(d);
-	nodes.push_back(e);
-	nodes.push_back(f);
-	nodes.push_back(g);
-	nodes.push_back(h);
 }
 
 void PlayState::update(double d){
+	theLevel.update();
+
 	t+= d * 0.0001;
 	sx = (r+200)*cos(t) + cx;
 	sy = r*sin(t) + cy;
@@ -36,23 +32,19 @@ void PlayState::update(double d){
 }
 
 void PlayState::handleEvent(){
+	theLevel.handleEvent(input);
+
 	if (input->isPressed(SDLK_ESCAPE))
 		StateManager::instance().popState();
 }
 
 void PlayState::draw(){
 	gfx->drawFullBG(bg);
-	gfx->drawFromSpritesheet(ResourceLoader::getSprite("Sun"), { sx, sy, 128, 128 });
-	for (int i = 0; i < nodes.size(); i++){
-		gfx->drawLine(light.x, light.y, nodes.at(i).getNodeX(), nodes.at(i).getNodeY(), 1500);
-	}	
-
-	for (auto player : players){
-		player.draw(gfx);
-	}
-	//gfx->drawFromSpritesheet(block, { 0, 512, 128, 128 }, { 500, 500, 64, 64 });
-	//gfx->drawFromSpritesheet(block, { 128, 512, 128, 128 }, { 564, 500, 64, 64 });
-	//gfx->drawFromSpritesheet(block, { 256, 512, 128, 128 }, { 627, 500, 64, 64 });
+	gfx->drawFromSpritesheet(sun, { sx, sy, 128, 128 });
+	//for (int i = 0; i < nodes.size(); i++){
+	//	gfx->drawLine(light.x, light.y, nodes.at(i).getNodeX(), nodes.at(i).getNodeY(), 1500);
+	//}	
+	theLevel.draw(gfx);
 }
 
 void PlayState::clean(){}

@@ -15,14 +15,17 @@ public:
 	Sprite() : posOnSheet({ 0, 0, 0, 0 }){}
 	Sprite(SDL_Texture * sheet, SDL_Rect position){ spritesheet = sheet; posOnSheet = position; }
 
-	void setPos(SDL_Rect p)			{ posOnSheet = p;	}
-	void setSheet(SDL_Texture* t)	{ spritesheet = t;	}
+	void setFlip(SDL_RendererFlip f)	{ flip = f;			  }
+	void setPos(SDL_Rect p)				{ posOnSheet = p;	  }
+	void setSheet(SDL_Texture* t)		{ spritesheet = t;	  }
 
-	SDL_Rect		getPos()		{ return posOnSheet;  }
-	SDL_Texture *	getTexture()	{ return spritesheet; }
+	SDL_RendererFlip	getFlip()		{ return flip;		  }
+	SDL_Rect			getPos()		{ return posOnSheet;  }
+	SDL_Texture *		getTexture()	{ return spritesheet; }
 private:
-	SDL_Rect		posOnSheet;
-	SDL_Texture *	spritesheet;
+	SDL_RendererFlip	flip;
+	SDL_Rect			posOnSheet;
+	SDL_Texture *		spritesheet;
 };
 
 class ResourceLoader{

@@ -3,9 +3,10 @@
 void CharSelectState::goPlay(){
 	std::vector<Player> player;
 	for (auto p : players){
-		if (p->getState() == READY)
+		if (p->getState() == READY){
 			player.push_back(p->getPlayer());
-	}
+	}	}
+
 	PlayState * play = new PlayState(player);
 	player.clear();
 	StateManager::instance().pushState(play);
@@ -85,6 +86,7 @@ void CharSelectState::draw(){
 }
 
 playerQuarter::playerQuarter(const int i, SDL_Rect p) : id(i), pos(p), playerPos(p), selectedButton(0), playerInput(NONE), thisPlayerState(NOT_PLAYING){
+	player.setControllerID(getControllerID());
 	player.setClass(NO_CLASS);
 	playerPos.y += 50;
 	bg = ResourceLoader::getSprite("MenuBG");

@@ -104,7 +104,7 @@ void GraphicsEngine::draw(SDL_Texture * t, SDL_Rect dest){
 }
 
 void GraphicsEngine::drawFromSpritesheet(Sprite s, SDL_Rect dest){
-	SDL_RenderCopy(renderer, s.getTexture(), &s.getPos(), &dest);
+	SDL_RenderCopyEx(renderer, s.getTexture(), &s.getPos(), &dest, NULL, NULL, s.getFlip());
 }
 
 void GraphicsEngine::drawFullBG(SDL_Texture * t){

@@ -1,8 +1,9 @@
 #ifndef GRAPHICSENGINE_H_
 #define GRAPHICSENGINE_H_
 
+#include "../SDL2.0\include\SDL.h"
+#include "../SDL2_TTF\include\SDL_ttf.h"
 #include "Settings.h"
-#include "AbstractGameObj.h"
 #include <memory>
 
 class GraphicsEngine{

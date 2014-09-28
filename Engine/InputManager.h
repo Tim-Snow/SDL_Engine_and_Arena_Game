@@ -41,6 +41,7 @@ public:
 	JoystickDirections isLeftJoystickMoved(int);
 	JoystickDirections isAnyLeftJoystickMoved();
 	
+	int		getControllerAxisValue(int id, SDL_GameControllerAxis a);
 	bool	isControllerAvailble(int id){ 	return controllers[id].inUse;	}
 	bool	isHeld(SDL_Keycode k)		{	return keysH[k];				}
 	bool	isPressed(SDL_Keycode);
