@@ -2,48 +2,39 @@
 #define GAMEOBJECT_H_
 
 #include "../Engine\GraphicsEngine.h"
-
-typedef struct
-{
-	float x, y;
-	float w, h;
-} SDL_RectF;
-
-typedef struct
-{
-	float x;
-	float y;
-} SDL_PointF;
+#include "../Engine\2DPhysicsEngine.h"
 
 class GameObject{
 public:
 	GameObject() 
-		: pos({ 0.0, 0.0 }), width(0),     height(0),      visible(false),   gravity(false), scale(1.00), flipped(false), xVel(0.00), yVel(0.00){}
-	GameObject(int width, int height, bool vis = false, bool grav = false, bool flip = false)
-		: pos({ 0.0, 0.0 }), width(width), height(height), visible(vis),	 gravity(grav),  scale(1.00), flipped(flip),  xVel(0.00), yVel(0.00){}
+		: worldPos({ 0.00, 0.00 }), screenPos({ 0.00, 0.00 }), width(0.00), height(0.00), visible(false), gravity(false), scale(1.00), flipped(false), velocity({ 0.00, 0.00 }), fwidth(0.00), fheight(0.00){}
+	GameObject(float width, float height, bool vis = false, bool grav = false, bool flip = false)
+		: worldPos({ 0.00, 0.00 }), screenPos({ 0.00, 0.00 }), width(width), height(height), visible(vis), gravity(grav), scale(1.00), flipped(flip), velocity({ 0.00, 0.00 }), fwidth(width), fheight(height){}
 
-	virtual void update(){ setPosition({ pos.x + xVel, pos.y + yVel }); }
-	virtual void draw(std::shared_ptr<GraphicsEngine> g){ g->drawFromSpritesheet(sprite, { pos.x, pos.y, width, height}); }
+	virtual void update(){ setPosition({ worldPos.x + velocity.x, worldPos.y + velocity.y }); }
+	virtual void draw(std::shared_ptr<GraphicsEngine> g){ g->drawFromSpritesheet(sprite, { screenPos.x, screenPos.y, fwidth, fheight}); }
 
-	virtual bool			collidesWith(SDL_RectF obj)	{
-		SDL_RectF thisObj = { pos.x, pos.y, width, height };
-
-		return !(obj.x > thisObj.x + thisObj.w
-			|| obj.x + obj.w < thisObj.x
-			|| obj.y > thisObj.y + thisObj.h
-			|| obj.y + obj.h < thisObj.y);
+	virtual void			addSpriteToObject(Sprite s)	{ sprite		= s;		}
+	virtual void			setVelocity(SDL_PointF v)	{ velocity		= v;		}
+	virtual void			setYVel(float y)			{ velocity.y	= y;		}
+	virtual void			setXVel(float x)			{ velocity.x	= x;		}
+	virtual void			setPosition(SDL_PointF p)	{ worldPos  = { p.x, p.y }; }
+	virtual void			setScreenPos(SDL_PointF p)	{ screenPos = { p.x, p.y }; }
+	virtual void			setScale(float f){
+		if (scale != f){
+			scale = f;
+			fwidth	= (float)width	* scale;	
+			fheight	= (float)height	* scale;
+		}
 	}
-	virtual void			addSpriteToObject(Sprite s)	{ sprite = s;			}
-	virtual void			setYVel(float y)			{ yVel = y;				}
-	virtual void			setXVel(float x)			{ xVel = x;				}
-	virtual void			setPosition(SDL_PointF p)	{ pos = { p.x, p.y };	}
-	virtual void			setScale(float f)			{ scale = f;			}
 
-	virtual SDL_RectF		getPosRect()	{ return { pos.x, pos.y, width, height };	}
-	virtual SDL_PointF		getPosition()	{ return { pos.x, pos.y };					}
-	virtual float			getScale()		{ return scale;								}
-	virtual bool			getVisible()	{ return visible;							}
-	virtual bool			getGravity()	{ return gravity;							}
+	virtual SDL_PointF&		getVelocity()	{ return	velocity;									}
+	virtual SDL_PointF&		getPosition()	{ return	worldPos;									}
+	virtual SDL_PointF&		getScreenPos()	{ return	screenPos;									}
+	virtual SDL_RectF		getPosRect()	{ return  { screenPos.x, screenPos.y, fwidth, fheight };}
+	virtual float			getScale()		{ return	scale;										}
+	virtual bool			getVisible()	{ return	visible;									}
+	virtual bool			getGravity()	{ return	gravity;									}
 
 	virtual void			isFlipped(bool b){
 		if (flipped != b)	flipped = b;
@@ -51,10 +42,12 @@ public:
 		else { 				sprite.setFlip(SDL_FLIP_NONE); 	}	}
 
 protected:
-	int			width,	 height;
-	float		scale,	 xVel,	  yVel;
-	bool		flipped, gravity, visible;
-	SDL_PointF	pos;	 Sprite	  sprite;
+	//add screen + world pos to allow camera
+	int			width,		height; //original size
+	float		scale,		fwidth,		fheight;	//for zooming camera
+	bool		flipped,	gravity,	visible;
+	SDL_PointF	screenPos;	SDL_PointF	worldPos;	SDL_PointF  velocity;
+	Sprite		sprite;
 };
 
 #endif /* defined (_GAMEOBJECT_H_) */

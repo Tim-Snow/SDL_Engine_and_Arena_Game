@@ -29,7 +29,7 @@ void MenuState::init(){
 	setSelBorderColour({ 30, 130, 230, 255 });
 	setItemBgColour({ 200, 200, 200, 255 });
 	int screenPortionH = gfx->getWindowHeight() / 10;
-	int screenPortionW = gfx->getWindowWidth() / 10;
+	int screenPortionW = gfx->getWindowWidth()  / 10;
 
 	SDL_Rect posRect = { (screenPortionW * 3.5), (screenPortionH * 3), (screenPortionW*3), (screenPortionH * 2) };
 	playButton.setTexture(ResourceLoader::getResource("playText")).setFunc(goToCharSelect).setID(0).setPosition(posRect).setBorderSize(10);

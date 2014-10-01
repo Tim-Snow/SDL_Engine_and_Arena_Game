@@ -1,24 +1,24 @@
 #include "PlayState.h"
 
 void PlayState::init(){
+	theLevel.initViewport(gfx);
+	bg = ResourceLoader::getResource("dayBG");
+	
+	sun = ResourceLoader::getSprite("Sun");
+	light = { 0, 0, 4, 4 };
 	t = 0.0;
 	r = 350;
 	cx = gfx->getWindowWidth() / 2;
 	cy = gfx->getWindowHeight() / 2;
-	
+
 	GameObject g = { 256, 256, true, false, true };
 	block = ResourceLoader::getSprite("Ground");
 	g.addSpriteToObject(block);
-	g.setPosition({ 0.0, 500.0 });
-	theLevel.addObjectToWorld(g);
-	//theLevel.addObjectToWorld(g);
-	//g.setPosition({ 256.0, 500.0 });
-	g.setPosition({ 600.0, 500.0 });
-	theLevel.addObjectToWorld(g);
 
-	sun = ResourceLoader::getSprite("Sun");
-	bg = ResourceLoader::getResource("dayBG");
-	light = { 0, 0, 4, 4 };
+	for (int i = 0; i < 20; i++){
+		g.setPosition({ i*256.00, 500.00 });
+		theLevel.addObjectToWorld(g);
+	}
 }
 
 void PlayState::update(double d){
@@ -33,6 +33,11 @@ void PlayState::update(double d){
 
 void PlayState::handleEvent(){
 	theLevel.handleEvent(input);
+
+	if (input->isControllerHeld(0, SDL_CONTROLLER_BUTTON_X))
+		theLevel.zoomOut();
+	if (input->isControllerHeld(0, SDL_CONTROLLER_BUTTON_Y))
+		theLevel.zoomIn();
 
 	if (input->isPressed(SDLK_ESCAPE))
 		StateManager::instance().popState();

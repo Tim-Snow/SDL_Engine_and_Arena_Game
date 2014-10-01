@@ -7,9 +7,9 @@ Player::Player() : GameObject(256, 256, true, true, true), playerState(PLAYER_ID
 	playerLegsRunning[0] = ResourceLoader::getSprite("PlayerLegs1");
 	playerLegsRunning[1] = ResourceLoader::getSprite("PlayerLegs2");
 	playerLegsRunning[2] = ResourceLoader::getSprite("PlayerLegs3");
-	mainPos = armPos = legPos = { pos.x, pos.y, width, height };
-	//  = { pos.x, pos.y, width, height };
-	weapPos = { pos.x + width / 3, pos.y, width, height };
+
+	mainPos = armPos = legPos = { screenPos.x, screenPos.y, fwidth, fheight };
+	weapPos = { screenPos.x + fwidth / 3, screenPos.y, fwidth, fheight };
 }
 
 void Player::isFlipped(bool b){ 
@@ -35,7 +35,7 @@ void Player::isFlipped(bool b){
 }
 
 void Player::jump(){
-	yVel = -4.00;
+	velocity.y = -4.00;
 }
 
 void Player::setClass(playerClasses c){
@@ -80,47 +80,45 @@ void Player::handleEvent(std::shared_ptr<InputManager> i){
 
 void Player::update(){
 	++cStep;
-	if (xVel != 0.00){
+	if (velocity.x != 0.00){
 		float slowSpeed = 0.00;
 		if (playerState == PLAYER_IDLE)		slowSpeed = 0.10;
 		if (playerState == PLAYER_DUCKING)	slowSpeed = 0.05;
 
-		if		(xVel >  0.10)	{ xVel -= slowSpeed; }
-		else if (xVel < -0.10)	{ xVel += slowSpeed; }
-		else	 xVel =	 0.00;
+		if		(velocity.x >  0.10)	{ velocity.x -= slowSpeed; }
+		else if (velocity.x < -0.10)	{ velocity.x += slowSpeed; }
+		else	 velocity.x = 0.00;
 	}
 
 	if (air){
-		yVel += 0.10;
-	} else { 
-		if (yVel > 0.00) //if not in air and yVel is falling, stop
-			yVel  =  0.00;
+		velocity.y += 0.10;
+	} else if (velocity.y > 0.00){ //if not in air and yVel is falling, stop
+		velocity.y = 0.00;
 	}
-	
 
 	if (flipped){
 		if (playerState == PLAYER_WALKING){
-			if (xVel < 1.0)	xVel = 1.0;
+			if (velocity.x < 1.0)	velocity.x = 1.0;
 		}
 		if (playerState == PLAYER_RUNNING){
-			if (xVel < 10.0)	xVel += 0.1;
+			if (velocity.x < 5.0)	velocity.x += 0.1;
 			++cStep;
 		}
 	} else {
 		if (playerState == PLAYER_WALKING){
-			if (xVel > -1.0)	xVel = -1.0;
+			if (velocity.x > -1.0)	velocity.x = -1.0;
 		}
 		if (playerState == PLAYER_RUNNING){
-			if (xVel > -10.0)	xVel -= 0.1;
+			if (velocity.x > -5.0)	velocity.x -= 0.1;
 			++cStep;
 		}
 	}
 
 	if (playerState == PLAYER_IDLE || playerState == PLAYER_DUCKING || cStep >= 60) cStep = 0; 
-	setPosition({ pos.x + xVel, pos.y + yVel });
-	legPos = mainPos = armPos = { pos.x, pos.y, width, height };
-	if (flipped) weapPos = { pos.x + width / 3, pos.y, width, height };
-	else weapPos = { pos.x - width / 3, pos.y, width, height };
+
+	legPos = mainPos = armPos = { screenPos.x, screenPos.y, fwidth, fheight };
+	if (flipped) weapPos = { screenPos.x + fwidth / 3, screenPos.y, fwidth, fheight };
+	else weapPos = { screenPos.x - fwidth / 3, screenPos.y, fwidth, fheight };
 }
 
 void Player::draw(std::shared_ptr<GraphicsEngine> g, SDL_Rect pos){

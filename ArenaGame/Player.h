@@ -16,25 +16,14 @@ public:
 	void draw(std::shared_ptr<GraphicsEngine> g);
 	void draw(std::shared_ptr<GraphicsEngine> g, SDL_Rect pos);
 
-	bool collidesWith(SDL_RectF obj){
-		return !(obj.x > mainPos.x + mainPos.w
-			|| obj.x + obj.w < mainPos.x
-			|| obj.y > mainPos.y + mainPos.h
-			|| obj.y + obj.h < mainPos.y) ||
-
-			!(obj.x > legPos.x + legPos.w
-			|| obj.x + obj.w < legPos.x
-			|| obj.y > legPos.y + legPos.h
-			|| obj.y + obj.h < legPos.y);
-	}
 	void			jump();
 	void			isFlipped(bool b);
 	void			setClass(playerClasses p);
+	bool			inAir()						{ return air;				}
 	void			setAir(bool b)				{ air = b;					}
 	void			setState(playerStates s)	{ playerState  = s;			}
 	void			setControllerID(int i)		{ controllerId = i;			}
-
-	bool			inAir()						{ return air;				}	
+	
 	int				getControllerID()			{ return controllerId;		}
 	playerStates	getState()					{ return playerState;		}
 	playerClasses	getClass()					{ return playerClass;		}
